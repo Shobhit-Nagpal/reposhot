@@ -1,0 +1,26 @@
+<form class="min-w-[150px] max-w-[600px] w-full space-y-6">
+  <div class="space-y-2">
+    <h1 class="text-3xl font-bold">Analyze Your Repository</h1>
+    <p class="text-gray-600 dark:text-gray-400">Enter a GitHub repository URL to get started</p>
+  </div>
+
+  <mat-form-field class="w-full" appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Repository URL</mat-label>
+    <input
+      matInput
+      placeholder="https://github.com/torvalds/linux"
+      [value]="link()"
+      (input)="onInputEvent($event)"
+    />
+    <mat-hint>Example: https://github.com/username/repository</mat-hint>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="w-full h-12 text-base font-medium"
+    (click)="onSubmit()"
+  >
+    Analyze Repository
+  </button>
+</form>

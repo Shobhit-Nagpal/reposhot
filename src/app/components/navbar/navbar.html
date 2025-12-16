@@ -1,0 +1,15 @@
+<mat-toolbar class="flex items-center justify-between">
+  <span>Reposhot</span>
+
+  <div class="flex items-center gap-2">
+    <a href="https://github.com/Shobhit-Nagpal/reposhot" target="_blank" rel="noopener">
+      <button mat-icon-button>
+        <!-- GitHub SVG or mat-icon -->
+      </button>
+    </a>
+
+    <button mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{ theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
