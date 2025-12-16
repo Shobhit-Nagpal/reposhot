@@ -11,9 +11,13 @@ import { GithubForm } from './components/github-form/github-form';
   templateUrl: './app.html',
 })
 export class App {
-  protected hasUsername = signal(false);
+  protected showCanvas = signal(false);
 
-  toggleButton() {
-    this.hasUsername.set(!this.hasUsername());
+  onFormFilled(value: boolean) {
+    if (value) {
+      this.showCanvas.set(true);
+    } else {
+      this.showCanvas.set(false);
+    }
   }
 }

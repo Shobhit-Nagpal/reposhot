@@ -15,6 +15,10 @@
     "target": "ES2022",
     "module": "preserve",
     "strictPropertyInitialization": false,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
