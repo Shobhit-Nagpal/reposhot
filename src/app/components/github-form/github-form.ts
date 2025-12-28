@@ -3,9 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RepositoryService } from '@/app/services/repository/repository.service';
+import { MaybeRepository } from '@/types';
 
 @Component({
   selector: 'reposhot-github-form',
@@ -13,12 +14,12 @@ import { RepositoryService } from '@/app/services/repository/repository.service'
   templateUrl: './github-form.html',
 })
 export class GithubForm implements OnDestroy {
-  formFilled = output<boolean>();
+  responseData = output<MaybeRepository>();
 
   link = signal<string>('');
   #repositoryService = inject(RepositoryService);
   #snackBar = inject(MatSnackBar);
-  #response$: Subscription;
+  #destroy$ = new Subject<void>();
 
   onInputEvent(event: Event) {
     this.link.set((event.target as HTMLInputElement).value);
@@ -33,14 +34,17 @@ export class GithubForm implements OnDestroy {
       });
       return;
     }
-    this.#response$ = this.#repositoryService.fetchRepository(this.link()).subscribe((res) => {
-      console.log(res);
-      this.formFilled.emit(true);
-    });
+    this.#repositoryService
+      .fetchRepository(this.link())
+      .pipe(takeUntil(this.#destroy$))
+      .subscribe((res) => {
+        this.responseData.emit(res);
+      });
   }
 
   ngOnDestroy(): void {
-    this.#response$.unsubscribe();
+    this.#destroy$.next();
+    this.#destroy$.unsubscribe();
   }
 
   #isValidInput() {

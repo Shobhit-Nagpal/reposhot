@@ -6,20 +6,10 @@
 
   <mat-form-field class="w-full" subscriptSizing="dynamic">
     <mat-label>Repository URL</mat-label>
-    <input
-      matInput
-      placeholder="https://github.com/torvalds/linux"
-      [value]="link()"
-      (input)="onInputEvent($event)"
-    />
+    <input matInput [value]="link()" (input)="onInputEvent($event)" />
   </mat-form-field>
 
-  <button
-    mat-raised-button
-    color="primary"
-    class="w-full h-12 text-base font-medium"
-    (click)="onSubmit()"
-  >
+  <button matButton="filled" class="w-full h-12 text-base font-medium" (click)="onSubmit()">
     Create snapshot
   </button>
 </form>

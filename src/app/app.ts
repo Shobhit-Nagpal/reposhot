@@ -4,6 +4,7 @@ import { Navbar } from './components/navbar/navbar';
 import { Footer } from './components/footer/footer';
 import { Canvas } from './components/canvas/canvas';
 import { GithubForm } from './components/github-form/github-form';
+import { MaybeRepository } from '@/types';
 
 @Component({
   selector: 'reposhot-root',
@@ -11,13 +12,18 @@ import { GithubForm } from './components/github-form/github-form';
   templateUrl: './app.html',
 })
 export class App {
-  protected showCanvas = signal(false);
+  protected canvasInput = signal<MaybeRepository>(undefined);
 
-  onFormFilled(value: boolean) {
-    if (value) {
-      this.showCanvas.set(true);
-    } else {
-      this.showCanvas.set(false);
+  showHomePage() {
+    if (this.canvasInput()) {
+      this.canvasInput.set(undefined);
     }
+  }
+
+  onResponseData(value: MaybeRepository) {
+    if (!value) {
+      return;
+    }
+    this.canvasInput.set(value);
   }
 }

@@ -1,28 +1,42 @@
-import { Component, effect, inject, Renderer2, signal } from '@angular/core';
+import { ThemeService } from '@/app/services/theme/theme.service';
+import { ThemeMode } from '@/types';
+import { Component, inject, OnInit, output, Renderer2 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
-type ThemeMode = 'system' | 'light' | 'dark';
 
 @Component({
   selector: 'reposhot-navbar',
   imports: [MatToolbarModule, MatIconModule],
   templateUrl: './navbar.html',
 })
-export class Navbar {
-  readonly theme = signal<ThemeMode>('system');
+export class Navbar implements OnInit {
+  logoClicked = output<boolean>();
+
+  #themeService = inject(ThemeService);
   #renderer = inject(Renderer2);
 
-  constructor() {
-    effect(() => this.#setTheme(this.theme()));
-  }
+  protected theme = this.#themeService.theme;
 
   toggleTheme() {
-    const current = this.theme();
-    this.theme.set(current === 'light' ? 'dark' : 'light');
+    const current = this.#themeService.getTheme();
+    const newTheme = current === 'light' ? 'dark' : 'light';
+    this.#setTheme(newTheme);
+  }
+
+  onLogoClick() {
+    this.logoClicked.emit(true);
+  }
+
+  ngOnInit(): void {
+    this.#setBackground(this.theme());
   }
 
   #setTheme(theme: ThemeMode) {
+    this.#themeService.setTheme(theme);
+    this.#setBackground(theme);
+  }
+
+  #setBackground(theme: ThemeMode) {
     this.#renderer.setProperty(
       document.body.style,
       'color-scheme',
