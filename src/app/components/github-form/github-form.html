@@ -1,0 +1,21 @@
+<form class="w-full max-w-[600px] px-4 sm:px-6 space-y-6">
+  <div class="space-y-2">
+    <h1 class="text-2xl sm:text-3xl font-bold">Snap Your Repository</h1>
+    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+      Enter a GitHub repository URL to get started
+    </p>
+  </div>
+
+  <mat-form-field class="w-full" subscriptSizing="dynamic">
+    <mat-label>Repository URL</mat-label>
+    <input matInput [value]="link()" (input)="onInputEvent($event)" />
+  </mat-form-field>
+
+  <button
+    matButton="filled"
+    class="w-full h-12 text-sm sm:text-base font-medium"
+    (click)="onSubmit()"
+  >
+    Create snapshot
+  </button>
+</form>

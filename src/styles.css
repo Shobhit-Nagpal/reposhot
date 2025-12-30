@@ -1,3 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.logo-filter {
+  filter: brightness(0); /* Makes it black */
+  transition: filter 0.2s ease; /* Smooth transition */
+}
+
+/* When dark theme is active */
+:root[data-theme='dark'] .logo-filter,
+[data-theme='dark'] .logo-filter {
+  filter: brightness(0) invert(1); /* Makes it white */
+}
