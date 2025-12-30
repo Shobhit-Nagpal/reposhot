@@ -52,7 +52,7 @@ export class Canvas implements AfterViewInit {
       {
         stars: this.canvasData().stars,
         forks: this.canvasData().forks,
-        contributors: this.canvasData().contributors,
+        issues: this.canvasData().issues,
       },
       Q3.x,
       Q3.y,

@@ -34,11 +34,22 @@ export class GithubForm implements OnDestroy {
       });
       return;
     }
+    const { owner, repo } = this.#repositoryService.extractDetails(this.link());
+
     this.#repositoryService
-      .fetchRepository(this.link())
+      .fetchRepository(owner, repo)
       .pipe(takeUntil(this.#destroy$))
-      .subscribe((res) => {
-        this.responseData.emit(res);
+      .subscribe({
+        next: (repo) => {
+          this.responseData.emit(repo)
+        },
+        error: (err) => {
+          this.#snackBar.open(err.message, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        }
       });
   }
 
