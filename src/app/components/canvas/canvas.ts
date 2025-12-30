@@ -70,8 +70,9 @@ export class Canvas implements AfterViewInit {
     canvasEl.height = canvas.height * dpr;
 
     // Set CSS display size (what user sees)
-    canvasEl.style.width = canvas.width + 'px';
-    canvasEl.style.height = canvas.height + 'px';
+    canvasEl.style.width = '100%';
+    canvasEl.style.height = 'auto';
+    canvasEl.style.maxWidth = canvasEl.width + 'px';
 
     this.#ctx = canvasEl.getContext('2d') as CanvasRenderingContext2D;
 
