@@ -37,10 +37,20 @@ export class Navbar implements OnInit {
   }
 
   #setBackground(theme: ThemeMode) {
+    const resolvedTheme =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : theme;
+
     this.#renderer.setProperty(
       document.body.style,
       'color-scheme',
       theme === 'system' ? 'light dark' : theme,
     );
+
+    // Add this line - set data-theme on document root
+    this.#renderer.setAttribute(document.documentElement, 'data-theme', resolvedTheme);
   }
 }
