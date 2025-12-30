@@ -104,10 +104,9 @@ export function drawRepoInfo(
 
   // Truncate if needed
   const visibleDescLines = descLines.slice(0, Math.max(0, maxLines));
-  const descHeight = visibleDescLines.length * lineHeightPx;
 
   // Calculate total content height with actual visible lines
-  const totalHeight = usernameFontSize + repoFontSize + gapBetweenRepoAndDesc + descHeight;
+  const totalHeight = usernameFontSize + repoFontSize + gapBetweenRepoAndDesc + lineHeightPx;
 
   let currentY = quadrantY + (quadrantH - totalHeight);
   const startX = quadrantX + padding;
