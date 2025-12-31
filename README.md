@@ -1,59 +1,84 @@
-# Reposhot
+# reposhot
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+> Create beautiful snapshots of your GitHub repositories.
 
-## Development server
+Generate clean, shareable cards showcasing your GitHub repos - perfect for portfolios, social media, or documentation. Built with Angular 21 and rendered via Canvas for pixel-perfect exports.
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
-```
+- **Clean Visual Cards** - Minimalist design showing repo name, tagline, and key stats (stars, forks, issues)
+- **GitHub Integration** - Fetch real-time repo data including owner avatar
+- **Canvas Rendering** - Programmatic image generation for consistent, high-quality exports
+- **One-Click Download** - Export your snapshot instantly as PNG
+- **Responsive Design** - Built with Angular Material and Tailwind CSS
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Quick Start
 
 ```bash
-ng generate component component-name
+# Clone the repo
+git clone https://github.com/Shobhit-Nagpal/reposhot.git
+cd reposhot
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Navigate to `http://localhost:4200` - the app will auto-reload on changes.
+
+## Tech Stack
+
+- **Angular 21** - Latest Angular with standalone components
+- **Angular Material** - UI component library
+- **Tailwind CSS 4** - Utility-first styling
+- **Canvas API** - Programmatic image generation
+- **Vitest** - Fast unit testing
+- **TypeScript 5.9** - Type safety
+
+## Development
+
+### Available Scripts
 
 ```bash
-ng generate --help
+npm start          # Start dev server
+npm run build      # Production build
+npm run watch      # Build with file watching
+npm test           # Run Vitest tests
+npm run lint       # ESLint code checking
 ```
 
-## Building
+### Code Style
 
-To build the project run:
+This project uses Prettier with Angular-specific formatting:
+- 100 character line width
+- Single quotes
+- Angular HTML parser for templates
 
-```bash
-ng build
-```
+Formatting runs automatically based on the config in `package.json`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Architecture
 
-## Running unit tests
+The app follows a straightforward data flow:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+1. **User Input** - Enter GitHub username/repo or provide repo URL
+2. **GitHub API** - Fetch repository metadata (name, description, stats, owner info)
+3. **Canvas Rendering** - Generate snapshot card with repo data and styling
+4. **Export** - Convert canvas to downloadable PNG image
 
-```bash
-ng test
-```
+Key implementation details:
+- Canvas-based rendering ensures consistent output across different browsers and devices
+- Angular's reactive forms handle user input and validation
+- Material components provide the UI foundation with Tailwind for custom styling
 
-## Running end-to-end tests
+## Contributing
 
-For end-to-end (e2e) testing, run:
+PRs welcome! A few guidelines:
+- Follow the existing code style (Prettier will help)
+- Add tests for new features
+- Keep commits focused and descriptive
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Built by [@Shobhit-Nagpal](https://github.com/Shobhit-Nagpal)
