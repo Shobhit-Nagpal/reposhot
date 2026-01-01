@@ -71,7 +71,7 @@ export class Canvas implements AfterViewInit {
     this.ctx.scale(this.dpr, this.dpr);
 
     const colors = isDark ? {
-      bg: '#121214',
+      bg: '#010409',
       border: '#1f1f22',
       text: '#e4e4e7',
       textSecondary: '#71717a',
