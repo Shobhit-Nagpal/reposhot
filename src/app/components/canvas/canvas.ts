@@ -60,8 +60,8 @@ export class Canvas implements AfterViewInit {
     const data = this.canvasData();
     const isDark = this.getResolvedTheme() === 'dark';
 
-    const width = Math.min(1200, window.innerWidth - 32);
-    const height = 400;
+    const width = Math.min(650, window.innerWidth - 32);
+    const height = 350;
 
     this.canvas.width = width * this.dpr;
     this.canvas.height = height * this.dpr;
@@ -127,10 +127,9 @@ export class Canvas implements AfterViewInit {
     const repoText = `${data.owner}/${data.name}`;
     this.ctx.fillText(repoText, leftX, currentY);
 
-    // Draw stars badge
     const repoTextWidth = this.ctx.measureText(repoText).width;
     const badgeX = leftX + repoTextWidth + 12;
-    const badgeY = currentY - 12;
+    const badgeY = currentY - 14;
     const badgeText = `${data.stars} STARS`;
     this.ctx.font = 'bold 10px "JetBrains Mono", monospace';
     const badgeWidth = this.ctx.measureText(badgeText).width + 16;
