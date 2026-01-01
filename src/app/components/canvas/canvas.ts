@@ -1,99 +1,35 @@
 import { Repository } from '@/types';
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  canvas,
-  canvasUi,
-  drawAvatar,
-  drawBackground,
-  drawLogo,
-  drawRepoInfo,
-  drawStats,
-  Q1,
-  Q2,
-  Q3,
-  Q4,
-  quadrant,
-} from './canvas.utils';
+import { Component, ElementRef, input, viewChild } from '@angular/core';
+import { domToPng } from 'modern-screenshot';
 
 @Component({
   selector: 'reposhot-canvas',
-  imports: [MatButtonModule],
+  standalone: true,
   templateUrl: './canvas.html',
 })
-export class Canvas implements AfterViewInit {
+export class Canvas {
   canvasData = input.required<Repository>();
-  canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
+  cardElement = viewChild.required<ElementRef<HTMLElement>>('cardElement');
 
-  #ctx: CanvasRenderingContext2D;
-  #imageName = 'reposhot-image.png';
+  async downloadImage() {
+    const el = this.cardElement().nativeElement;
 
-  ngAfterViewInit(): void {
-    this.#initSetup();
-  }
+    try {
+      // modern-screenshot options for high fidelity
+      const dataUrl = await domToPng(el, {
+        scale: 2,           // High resolution
+        quality: 1,         // Maximum quality
+        backgroundColor: '#0a0a0a', // Matches global background
+        features: {
+        }
+      });
 
-  #draw() {
-    this.#drawSnapshot();
-  }
-
-  #drawSnapshot() {
-    drawBackground(this.#ctx, canvasUi.backgroundColor, canvas.width, canvas.height);
-    drawAvatar(this.#ctx, this.canvasData().avatarUrl, Q2.x, Q2.y, quadrant.width, quadrant.height);
-    drawRepoInfo(
-      this.#ctx,
-      this.canvasData().owner,
-      this.canvasData().name,
-      this.canvasData().description,
-      Q1.x,
-      Q1.y,
-      quadrant.width,
-      quadrant.height,
-    );
-    drawStats(
-      this.#ctx,
-      {
-        stars: this.canvasData().stars,
-        forks: this.canvasData().forks,
-        issues: this.canvasData().issues,
-      },
-      Q3.x,
-      Q3.y,
-      quadrant.width,
-      quadrant.height,
-    );
-    drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);
-  }
-
-  #setupCanvas() {
-    const canvasEl = this.canvas().nativeElement;
-    const dpr = window.devicePixelRatio || 1;
-
-    // Set actual canvas buffer size (high-res)
-    canvasEl.width = canvas.width * dpr;
-    canvasEl.height = canvas.height * dpr;
-
-    // Set CSS display size (what user sees)
-    canvasEl.style.width = '100%';
-    canvasEl.style.height = 'auto';
-    canvasEl.style.maxWidth = canvasEl.width + 'px';
-
-    this.#ctx = canvasEl.getContext('2d') as CanvasRenderingContext2D;
-
-    // Scale all drawing operations
-    this.#ctx.scale(dpr, dpr);
-  }
-
-  #initSetup() {
-    this.#setupCanvas();
-    this.#draw();
-  }
-
-  downloadImage() {
-    const canvasURL = this.canvas().nativeElement.toDataURL();
-    const el = document.createElement('a');
-    el.href = canvasURL;
-    el.download = this.#imageName;
-    el.click();
-    el.remove();
+      const link = document.createElement('a');
+      link.download = `RS-${this.canvasData().name.toUpperCase()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Snapshot failed:', err);
+    }
   }
 }

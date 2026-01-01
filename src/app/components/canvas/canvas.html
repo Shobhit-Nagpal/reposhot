@@ -1,6 +1,69 @@
-<div class="space-y-4 w-full max-w-[1200px] mx-auto px-4">
-  <canvas #reposhotCanvas class="w-full h-auto block"></canvas>
-  <button matButton="outlined" class="w-full h-12 text-base font-medium" (click)="downloadImage()">
-    Download
+<div
+  class="flex flex-col items-center space-y-10 w-full max-w-2xl mx-auto py-10 font-['JetBrains_Mono']"
+>
+  <div
+    #cardElement
+    class="relative w-full bg-[#121214] border border-[#1f1f22] rounded-lg p-8 flex flex-col md:flex-row gap-8 items-center shadow-2xl"
+  >
+    <div
+      class="absolute top-6 left-8 w-2.5 h-2.5 bg-[#ff5f56] rounded-full shadow-[0_0_10px_#ff5f56]"
+    ></div>
+
+    <div class="flex-1 space-y-6 mt-4">
+      <div class="flex items-center space-x-3">
+        <span class="text-zinc-500 text-sm tracking-tighter"
+          >{{ canvasData().owner }}/{{ canvasData().name }}</span
+        >
+        <span
+          class="border border-zinc-800 px-2 py-0.5 rounded text-[10px] text-zinc-400 font-bold uppercase"
+        >
+          {{ canvasData().stars }} Stars
+        </span>
+      </div>
+
+      <h1
+        class="text-2xl md:text-3xl font-bold text-zinc-100 leading-tight uppercase tracking-tighter break-words"
+      >
+        {{ canvasData().description || 'No description provided for this repository' }}
+      </h1>
+
+      <div class="text-zinc-500 text-xs font-medium tracking-widest uppercase">
+        Updated 2h ago // {{ canvasData().issues }} Issues
+      </div>
+
+      <div class="pt-6 border-t border-white/5">
+        <p class="text-[10px] uppercase text-zinc-600 mb-4 tracking-[0.2em]">System Contributors</p>
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <img
+              crossorigin="anonymous"
+              [src]="canvasData().avatarUrl"
+              class="w-5 h-5 rounded-sm grayscale opacity-50"
+              alt=""
+            />
+            <span class="text-[10px] text-zinc-500">{{ canvasData().owner }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-1 border border-zinc-800 bg-black shadow-2xl shrink-0">
+      <img
+        [src]="canvasData().avatarUrl"
+        crossorigin="anonymous"
+        alt="Profile"
+        class="w-48 h-48 md:w-56 md:h-56 object-cover grayscale-80 contrast-125 brightness-75"
+      />
+    </div>
+  </div>
+
+  <button
+    (click)="downloadImage()"
+    class="group relative px-8 py-4 bg-zinc-100 hover:bg-white text-black font-bold uppercase text-xs tracking-[0.3em] transition-all active:scale-95"
+  >
+    <div
+      class="absolute -bottom-1 -right-1 w-full h-full border border-zinc-500 -z-10 group-hover:bottom-0 group-hover:right-0 transition-all"
+    ></div>
+    Download_Snapshot.exe
   </button>
 </div>

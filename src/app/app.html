@@ -2,9 +2,9 @@
   <reposhot-navbar (logoClicked)="showHomePage()"></reposhot-navbar>
   <main class="flex-1 flex flex-col items-center justify-center">
     @if (canvasInput(); as data) {
-      <reposhot-canvas [canvasData]="data"></reposhot-canvas>
+    <reposhot-canvas [canvasData]="data"></reposhot-canvas>
     } @else {
-      <reposhot-github-form (responseData)="onResponseData($event)"></reposhot-github-form>
+    <reposhot-github-form (responseData)="onResponseData($event)"></reposhot-github-form>
     }
   </main>
   <reposhot-footer></reposhot-footer>
