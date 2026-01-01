@@ -122,7 +122,7 @@ export function drawRepoInfo(
   // Line 2: Repo name
   ctx.font = repoFont;
   ctx.fillStyle = canvasUi.primaryTextColor;
-  const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 6);
+  const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
 
@@ -153,17 +153,7 @@ function wrapRepoName(ctx: CanvasRenderingContext2D, text: string, maxWidth: num
     breakIndex--;
   }
 
-  // Now find the nearest separator (- or _) before breakIndex
-  const substringToBreak = text.substring(0, breakIndex);
-  const lastSeparatorIndex = Math.max(
-    substringToBreak.lastIndexOf('-'),
-    substringToBreak.lastIndexOf('_'),
-  );
-
-  // If we found a separator, break there. Otherwise break at calculated index
-  const finalBreakIndex = lastSeparatorIndex > 0 ? lastSeparatorIndex + 1 : breakIndex;
-
-  return text.substring(0, finalBreakIndex) + '...';
+  return text.substring(0, breakIndex) + '...';
 }
 
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
