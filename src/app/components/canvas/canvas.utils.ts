@@ -237,6 +237,32 @@ function drawStatItem(
   ctx.fillText(stat.label, labelStartX, startY + topRowHeight + numberLabelGap);
 }
 
+export function drawLogo(
+  ctx: CanvasRenderingContext2D,
+  quadrantX: number,
+  quadrantY: number,
+  quadrantW: number,
+  quadrantH: number,
+) {
+  const img = new Image();
+
+  img.onload = () => {
+    // Calculate logo dimensions
+    const logoWidth = 64;
+    const logoHeight = (img.height / img.width) * logoWidth;
+
+    // Position in bottom-right of quadrant
+    const x = quadrantX + quadrantW - logoWidth - canvasUi.padding;
+    const y = quadrantY + quadrantH - logoHeight - canvasUi.padding;
+
+    ctx.globalAlpha = 0.3;
+    ctx.drawImage(img, x, y, logoWidth, logoHeight);
+    ctx.globalAlpha = 1.0;
+  };
+
+  img.src = 'reposhot-logo.svg';
+}
+
 function formatNumber(num: number) {
   if (num >= 1000) {
     return (num / 1000).toFixed(1) + 'k';

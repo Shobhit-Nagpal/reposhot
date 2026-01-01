@@ -6,11 +6,13 @@ import {
   canvasUi,
   drawAvatar,
   drawBackground,
+  drawLogo,
   drawRepoInfo,
   drawStats,
   Q1,
   Q2,
   Q3,
+  Q4,
   quadrant,
 } from './canvas.utils';
 
@@ -59,6 +61,7 @@ export class Canvas implements AfterViewInit {
       quadrant.width,
       quadrant.height,
     );
+    drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);
   }
 
   #setupCanvas() {
