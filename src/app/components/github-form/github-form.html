@@ -15,7 +15,8 @@
     matButton="filled"
     class="w-full h-12 text-sm sm:text-base font-medium"
     (click)="onSubmit()"
+    [disabled]="loading()"
   >
-    Create snapshot
+    {{ buttonText() }}
   </button>
 </form>

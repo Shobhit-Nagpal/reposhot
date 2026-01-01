@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, output, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RepositoryService } from '@/app/services/repository/repository.service';
 import { MaybeRepository } from '@/types';
@@ -17,6 +17,9 @@ export class GithubForm implements OnDestroy {
   responseData = output<MaybeRepository>();
 
   link = signal<string>('');
+  loading = signal<boolean>(false);
+  protected buttonText = computed(() => (this.loading() ? 'Creating...' : 'Create snapshot'));
+
   #repositoryService = inject(RepositoryService);
   #snackBar = inject(MatSnackBar);
   #destroy$ = new Subject<void>();
@@ -36,12 +39,17 @@ export class GithubForm implements OnDestroy {
     }
     const { owner, repo } = this.#repositoryService.extractDetails(this.link());
 
+    this.loading.set(true);
+
     this.#repositoryService
       .fetchRepository(owner, repo)
-      .pipe(takeUntil(this.#destroy$))
+      .pipe(
+        takeUntil(this.#destroy$),
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
         next: (repo) => {
-          this.responseData.emit(repo)
+          this.responseData.emit(repo);
         },
         error: (err) => {
           this.#snackBar.open(err.message, 'Close', {
@@ -49,7 +57,7 @@ export class GithubForm implements OnDestroy {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
           });
-        }
+        },
       });
   }
 
