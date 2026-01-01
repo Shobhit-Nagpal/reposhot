@@ -122,7 +122,8 @@ export function drawRepoInfo(
   // Line 2: Repo name
   ctx.font = repoFont;
   ctx.fillStyle = canvasUi.primaryTextColor;
-  ctx.fillText(repoName, startX, currentY);
+  const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 6);
+  ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
 
   // Description block (truncated)
@@ -132,6 +133,37 @@ export function drawRepoInfo(
     ctx.fillText(line, startX, currentY);
     currentY += lineHeightPx;
   });
+}
+
+function wrapRepoName(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
+  if (!text) return '';
+  if (ctx.measureText(text).width <= maxWidth) {
+    return text;
+  }
+
+  // Find where to break (prefer breaking at separators)
+  let breakIndex = text.length;
+
+  // Binary search-ish approach: find the longest substring that fits with ellipsis
+  while (breakIndex > 0) {
+    const testText = text.substring(0, breakIndex) + '...';
+    if (ctx.measureText(testText).width <= maxWidth) {
+      break;
+    }
+    breakIndex--;
+  }
+
+  // Now find the nearest separator (- or _) before breakIndex
+  const substringToBreak = text.substring(0, breakIndex);
+  const lastSeparatorIndex = Math.max(
+    substringToBreak.lastIndexOf('-'),
+    substringToBreak.lastIndexOf('_'),
+  );
+
+  // If we found a separator, break there. Otherwise break at calculated index
+  const finalBreakIndex = lastSeparatorIndex > 0 ? lastSeparatorIndex + 1 : breakIndex;
+
+  return text.substring(0, finalBreakIndex) + '...';
 }
 
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
