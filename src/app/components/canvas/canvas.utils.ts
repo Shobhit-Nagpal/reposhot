@@ -314,7 +314,7 @@ export function drawTopLanguages(
   }
 
   // 1. Filter - only keep languages we have icons for
-  const filteredLanguages = languages.filter((lang) => languageIconsMap[lang.toLowerCase()]);
+  const filteredLanguages = languages.filter((lang) => mapLanguageToSvg(lang));
 
   // Early return if nothing to render
   if (filteredLanguages.length === 0) {
