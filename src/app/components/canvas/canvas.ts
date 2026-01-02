@@ -9,6 +9,7 @@ import {
   drawLogo,
   drawRepoInfo,
   drawStats,
+  drawTopLanguages,
   Q1,
   Q2,
   Q3,
@@ -61,6 +62,7 @@ export class Canvas implements AfterViewInit {
       quadrant.width,
       quadrant.height,
     );
+    drawTopLanguages(this.#ctx, this.canvasData().topLanguages, Q4.x, Q4.y, quadrant.width, quadrant.height);
     drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);
   }
 

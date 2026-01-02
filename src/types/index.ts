@@ -7,6 +7,7 @@ export interface Repository {
   name: string;
   issues: number;
   description?: string;
+  topLanguages?: string[];
 }
 
 export type MaybeRepository = Repository | undefined;
@@ -17,4 +18,4 @@ export type ApiResponse<T> = {
   success: boolean;
   error?: string;
   data?: T;
-}
+};

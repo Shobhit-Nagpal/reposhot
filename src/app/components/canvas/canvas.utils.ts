@@ -1,3 +1,19 @@
+import { devIconsCdn, languageIconsMap } from '@/data';
+import { mapLanguageToSvg } from '@/utils/mapping';
+
+const iconPaths = {
+  star: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXItaWNvbiBsdWNpZGUtc3RhciI+PHBhdGggZD0iTTExLjUyNSAyLjI5NWEuNTMuNTMgMCAwIDEgLjk1IDBsMi4zMSA0LjY3OWEyLjEyMyAyLjEyMyAwIDAgMCAxLjU5NSAxLjE2bDUuMTY2Ljc1NmEuNTMuNTMgMCAwIDEgLjI5NC45MDRsLTMuNzM2IDMuNjM4YTIuMTIzIDIuMTIzIDAgMCAwLS42MTEgMS44NzhsLjg4MiA1LjE0YS41My41MyAwIDAgMS0uNzcxLjU2bC00LjYxOC0yLjQyOGEyLjEyMiAyLjEyMiAwIDAgMC0xLjk3MyAwTDYuMzk2IDIxLjAxYS41My41MyAwIDAgMS0uNzctLjU2bC44ODEtNS4xMzlhMi4xMjIgMi4xMjIgMCAwIDAtLjYxMS0xLjg3OUwyLjE2IDkuNzk1YS41My41MyAwIDAgMSAuMjk0LS45MDZsNS4xNjUtLjc1NWEyLjEyMiAyLjEyMiAwIDAgMCAxLjU5Ny0xLjE2eiIvPjwvc3ZnPg==',
+  fork: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdpdC1mb3JrLWljb24gbHVjaWRlLWdpdC1mb3JrIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjE4IiByPSIzIi8+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjMiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjYiIHI9IjMiLz48cGF0aCBkPSJNMTggOXYyYzAgLjYtLjQgMS0xIDFIN2MtLjYgMC0xLS40LTEtMVY5Ii8+PHBhdGggZD0iTTEyIDEydjMiLz48L3N2Zz4=',
+  issues:
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNpcmNsZS1kb3QtaWNvbiBsdWNpZGUtY2lyY2xlLWRvdCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxIi8+PC9zdmc+',
+};
+
+const statIcons = {
+  star: createIconImage(iconPaths.star),
+  fork: createIconImage(iconPaths.fork),
+  issues: createIconImage(iconPaths.issues),
+};
+
 export const canvasUi = {
   backgroundColor: '#0D1117',
   borderColor: '#e1e4e8',
@@ -285,6 +301,76 @@ export function drawLogo(
   img.src = 'reposhot-logo.svg';
 }
 
+export function drawTopLanguages(
+  ctx: CanvasRenderingContext2D,
+  languages: string[] | undefined,
+  quadrantX: number,
+  quadrantY: number,
+  quadrantW: number,
+  quadrantH: number,
+) {
+  if (!languages) {
+    return;
+  }
+
+  // 1. Filter - only keep languages we have icons for
+  const filteredLanguages = languages.filter((lang) => languageIconsMap[lang.toLowerCase()]);
+
+  // Early return if nothing to render
+  if (filteredLanguages.length === 0) {
+    return;
+  }
+
+  // 2. Layout config
+  const iconSize = 32;
+  const itemGap = 40;
+  const labelFont = '18px sans-serif';
+
+  // 3. Measure total width needed
+  ctx.font = labelFont;
+
+  let totalWidth = 0;
+  const itemWidths: number[] = [];
+
+  filteredLanguages.forEach((_, index) => {
+    const itemWidth = iconSize;
+    itemWidths.push(itemWidth);
+
+    totalWidth += itemWidth;
+    if (index < filteredLanguages.length - 1) {
+      totalWidth += itemGap;
+    }
+  });
+
+  // 4. Calculate starting position (center horizontally and vertically)
+  const startX = quadrantX + canvasUi.padding + (quadrantW - totalWidth) / 2;
+  const centerY = quadrantY + quadrantH / 2;
+
+  // 5. Render each language
+  let currentX = startX;
+
+  filteredLanguages.forEach((lang, index) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // Important for CDN
+
+    const xPosition = currentX;
+    const iconY = centerY - iconSize / 2;
+    img.onload = () => {
+      ctx.drawImage(img, xPosition, iconY, iconSize, iconSize);
+    };
+
+    img.onerror = () => {
+      console.warn(`Icon not found for ${lang}`);
+    };
+
+    const iconSvg = mapLanguageToSvg(lang);
+    img.src = `${devIconsCdn}/${iconSvg}`;
+
+    // Move to next item position
+    currentX += itemWidths[index] + itemGap;
+  });
+}
+
 function formatNumber(num: number) {
   if (num >= 1000) {
     return (num / 1000).toFixed(1) + 'k';
@@ -292,31 +378,22 @@ function formatNumber(num: number) {
   return num.toString();
 }
 
-const iconPaths = {
-  star: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXItaWNvbiBsdWNpZGUtc3RhciI+PHBhdGggZD0iTTExLjUyNSAyLjI5NWEuNTMuNTMgMCAwIDEgLjk1IDBsMi4zMSA0LjY3OWEyLjEyMyAyLjEyMyAwIDAgMCAxLjU5NSAxLjE2bDUuMTY2Ljc1NmEuNTMuNTMgMCAwIDEgLjI5NC45MDRsLTMuNzM2IDMuNjM4YTIuMTIzIDIuMTIzIDAgMCAwLS42MTEgMS44NzhsLjg4MiA1LjE0YS41My41MyAwIDAgMS0uNzcxLjU2bC00LjYxOC0yLjQyOGEyLjEyMiAyLjEyMiAwIDAgMC0xLjk3MyAwTDYuMzk2IDIxLjAxYS41My41MyAwIDAgMS0uNzctLjU2bC44ODEtNS4xMzlhMi4xMjIgMi4xMjIgMCAwIDAtLjYxMS0xLjg3OUwyLjE2IDkuNzk1YS41My41MyAwIDAgMSAuMjk0LS45MDZsNS4xNjUtLjc1NWEyLjEyMiAyLjEyMiAwIDAgMCAxLjU5Ny0xLjE2eiIvPjwvc3ZnPg==',
-  fork: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdpdC1mb3JrLWljb24gbHVjaWRlLWdpdC1mb3JrIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjE4IiByPSIzIi8+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjMiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjYiIHI9IjMiLz48cGF0aCBkPSJNMTggOXYyYzAgLjYtLjQgMS0xIDFIN2MtLjYgMC0xLS40LTEtMVY5Ii8+PHBhdGggZD0iTTEyIDEydjMiLz48L3N2Zz4=',
-  issues:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNpcmNsZS1kb3QtaWNvbiBsdWNpZGUtY2lyY2xlLWRvdCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxIi8+PC9zdmc+',
-};
-
-const statIcons = {
-  star: createIconImage(iconPaths.star),
-  fork: createIconImage(iconPaths.fork),
-  issues: createIconImage(iconPaths.issues),
-};
-
-function createIconImage(dataUrl: string): HTMLImageElement {
+function createIconImage(dataUrl: string, convertToWhite = true): HTMLImageElement {
   // Decode base64
   const base64 = dataUrl.split(',')[1];
-  const svgString = atob(base64);
+  let svgString = atob(base64);
 
   // Replace currentColor with white
-  const whiteSvg = svgString.replace(/stroke="currentColor"/g, 'stroke="#ffffff"');
+  if (convertToWhite) {
+    svgString = svgString.replace(/stroke="currentColor"/g, 'stroke="#ffffff"');
+  }
 
   // Re-encode
-  const newDataUrl = 'data:image/svg+xml;base64,' + btoa(whiteSvg);
+  const newDataUrl = 'data:image/svg+xml;base64,' + btoa(svgString);
 
   const img = new Image();
   img.src = newDataUrl;
+
+  img.onerror = () => console.error('Failed to load image');
   return img;
 }
