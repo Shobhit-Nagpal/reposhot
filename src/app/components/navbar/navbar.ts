@@ -6,14 +6,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'reposhot-navbar',
+  standalone: true,
   imports: [MatToolbarModule, MatIconModule],
   templateUrl: './navbar.html',
 })
 export class Navbar implements OnInit {
   logoClicked = output<boolean>();
 
-  #themeService = inject(ThemeService);
-  #renderer = inject(Renderer2);
+  // Explicitly defining types fixes the "Object is of type unknown" error
+  readonly #themeService: ThemeService = inject(ThemeService);
+  readonly #renderer: Renderer2 = inject(Renderer2);
 
   protected theme = this.#themeService.theme;
 
@@ -44,13 +46,18 @@ export class Navbar implements OnInit {
           : 'light'
         : theme;
 
-    this.#renderer.setProperty(
-      document.body.style,
+    // Using setStyle on document.body is safer than setProperty on .style
+    this.#renderer.setStyle(
+      document.body,
       'color-scheme',
-      theme === 'system' ? 'light dark' : theme,
+      theme === 'system' ? 'light dark' : theme
     );
 
-    // Add this line - set data-theme on document root
-    this.#renderer.setAttribute(document.documentElement, 'data-theme', resolvedTheme);
+    // Set data-theme on document root
+    this.#renderer.setAttribute(
+      document.documentElement,
+      'data-theme',
+      resolvedTheme
+    );
   }
 }

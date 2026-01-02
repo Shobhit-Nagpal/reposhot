@@ -1,6 +1,20 @@
 <div class="space-y-4 w-full max-w-[1200px] mx-auto px-4">
   <canvas #reposhotCanvas class="w-full h-auto block"></canvas>
-  <button matButton="outlined" class="w-full h-12 text-base font-medium" (click)="downloadImage()">
-    Download
-  </button>
+  <div class="flex items-center justify-end">
+    <button
+      (click)="downloadImage()"
+      [class.bg-zinc-100]="getResolvedTheme() === 'dark'"
+      [class.text-black]="getResolvedTheme() === 'dark'"
+      [class.bg-zinc-900]="getResolvedTheme() === 'light'"
+      [class.text-white]="getResolvedTheme() === 'light'"
+      class="group relative px-8 py-4 font-bold uppercase text-xs tracking-[0.3em] transition-all active:scale-95 shadow-xl"
+    >
+      <div
+        [class.border-zinc-500]="getResolvedTheme() === 'dark'"
+        [class.border-zinc-900]="getResolvedTheme() === 'light'"
+        class="absolute -bottom-1 -right-1 w-full h-full border -z-10 group-hover:bottom-0 group-hover:right-0 transition-all"
+      ></div>
+      Download_Snapshot.exe
+    </button>
+  </div>
 </div>
