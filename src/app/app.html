@@ -1,10 +1,32 @@
 <div class="flex flex-col min-h-screen">
   <reposhot-navbar (logoClicked)="showHomePage()"></reposhot-navbar>
-  <main class="flex-1 flex flex-col items-center justify-center">
+  <main class="flex-1 flex">
     @if (canvasInput(); as data) {
-      <reposhot-canvas [canvasData]="data"></reposhot-canvas>
+      <mat-sidenav-container class="flex-1 sidenav-container">
+        <mat-sidenav 
+          #sidenav 
+          [mode]="isMobile() ? 'over' : 'side'" 
+          [opened]="sidenavOpened()"
+          class="w-[300px]"
+        >
+          <reposhot-sidebar></reposhot-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content class="flex flex-col sidenav-content">
+          <!-- Toggle button for sidebar -->
+          <div class="p-4">
+            <button mat-icon-button (click)="toggleSidenav()" class="mb-4">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <reposhot-canvas [canvasData]="data"></reposhot-canvas>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
     } @else {
-      <reposhot-github-form (responseData)="onResponseData($event)"></reposhot-github-form>
+      <div class="flex-1 flex flex-col items-center justify-center p-4">
+        <reposhot-github-form (responseData)="onResponseData($event)"></reposhot-github-form>
+      </div>
     }
   </main>
   <reposhot-footer></reposhot-footer>

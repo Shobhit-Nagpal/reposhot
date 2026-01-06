@@ -1,4 +1,4 @@
-import { devIconsCdn, languageIconsMap } from '@/data';
+import { devIconsCdn } from '@/data';
 import { mapLanguageToSvg } from '@/utils/mapping';
 
 const iconPaths = {
@@ -8,17 +8,17 @@ const iconPaths = {
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNpcmNsZS1kb3QtaWNvbiBsdWNpZGUtY2lyY2xlLWRvdCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxIi8+PC9zdmc+',
 };
 
-const statIcons = {
-  star: createIconImage(iconPaths.star),
-  fork: createIconImage(iconPaths.fork),
-  issues: createIconImage(iconPaths.issues),
-};
+// Function to create stat icons with custom color
+export function createStatIcons(color: string) {
+  return {
+    star: createIconImage(iconPaths.star, color),
+    fork: createIconImage(iconPaths.fork, color),
+    issues: createIconImage(iconPaths.issues, color),
+  };
+}
 
 export const canvasUi = {
-  backgroundColor: '#0D1117',
   borderColor: '#e1e4e8',
-  primaryTextColor: '#ffffff',
-  secondaryTextColor: '#f9fafb',
   padding: 60,
 };
 
@@ -89,11 +89,12 @@ export function drawRepoInfo(
   ctx: CanvasRenderingContext2D,
   username: string,
   repoName: string,
-  description: string = '',
+  description = '',
   quadrantX: number,
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
+  textColor: string,
 ) {
   const padding = canvasUi.padding;
   const maxWidth = quadrantW - padding * 2;
@@ -129,7 +130,7 @@ export function drawRepoInfo(
 
   // Line 1: Username + separator
   ctx.font = usernameFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = textColor;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText(username + ' / ', startX, currentY);
@@ -137,14 +138,14 @@ export function drawRepoInfo(
 
   // Line 2: Repo name
   ctx.font = repoFont;
-  ctx.fillStyle = canvasUi.primaryTextColor;
+  ctx.fillStyle = textColor;
   const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
 
   // Description block (truncated)
   ctx.font = descFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = textColor;
   visibleDescLines.forEach((line) => {
     ctx.fillText(line, startX, currentY);
     currentY += lineHeightPx;
@@ -205,9 +206,11 @@ export function drawStats(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
+  textColor: string,
 ) {
   const { stars, forks, issues } = stats;
 
+  const statIcons = createStatIcons(textColor);
   const statItems = [
     { icon: statIcons.star, value: stars, label: 'Stars' },
     { icon: statIcons.fork, value: forks, label: 'Forks' },
@@ -223,7 +226,7 @@ export function drawStats(
     const itemX = quadrantX + index * itemWidth;
     const itemCenterX = itemX + itemWidth / 2;
 
-    drawStatItem(ctx, stat, itemCenterX, centerY);
+    drawStatItem(ctx, stat, itemCenterX, centerY, textColor);
   });
 }
 
@@ -232,6 +235,7 @@ function drawStatItem(
   stat: { icon: HTMLImageElement; value: number; label: string },
   centerX: number,
   centerY: number,
+  textColor: string,
 ) {
   const iconSize = 24;
   const numberFont = 'bold 24px sans-serif';
@@ -263,14 +267,14 @@ function drawStatItem(
 
   // Draw number (aligned to icon baseline)
   ctx.font = numberFont;
-  ctx.fillStyle = canvasUi.primaryTextColor;
+  ctx.fillStyle = textColor;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText(numberText, topRowStartX + iconSize + iconNumberGap, startY);
 
   // Draw label (centered below)
   ctx.font = labelFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = textColor;
   ctx.textAlign = 'left';
   ctx.fillText(stat.label, labelStartX, startY + topRowHeight + numberLabelGap);
 }
@@ -378,15 +382,13 @@ function formatNumber(num: number) {
   return num.toString();
 }
 
-function createIconImage(dataUrl: string, convertToWhite = true): HTMLImageElement {
+function createIconImage(dataUrl: string, color = '#ffffff'): HTMLImageElement {
   // Decode base64
   const base64 = dataUrl.split(',')[1];
   let svgString = atob(base64);
 
-  // Replace currentColor with white
-  if (convertToWhite) {
-    svgString = svgString.replace(/stroke="currentColor"/g, 'stroke="#ffffff"');
-  }
+  // Replace currentColor with custom color
+  svgString = svgString.replace(/stroke="currentColor"/g, `stroke="${color}"`);
 
   // Re-encode
   const newDataUrl = 'data:image/svg+xml;base64,' + btoa(svgString);

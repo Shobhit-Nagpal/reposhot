@@ -58,3 +58,12 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Override Material sidenav background to match theme */
+.sidenav-container,
+.sidenav-content,
+mat-sidenav-container,
+mat-sidenav-content {
+  background: var(--mat-sys-surface) !important;
+  background-color: var(--mat-sys-surface) !important;
+}

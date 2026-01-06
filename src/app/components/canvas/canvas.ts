@@ -1,9 +1,8 @@
 import { Repository } from '@/types';
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, input, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   canvas,
-  canvasUi,
   drawAvatar,
   drawBackground,
   drawLogo,
@@ -16,6 +15,7 @@ import {
   Q4,
   quadrant,
 } from './canvas.utils';
+import { ColorConfigService } from '@/app/services/color-config/color-config.service';
 
 @Component({
   selector: 'reposhot-canvas',
@@ -28,6 +28,22 @@ export class Canvas implements AfterViewInit {
 
   #ctx: CanvasRenderingContext2D;
   #imageName = 'reposhot-image.png';
+  
+  private colorConfig = inject(ColorConfigService);
+
+  constructor() {
+    // Watch for color changes and redraw
+    effect(() => {
+      // Trigger effect when colors change
+      this.colorConfig.backgroundColor();
+      this.colorConfig.textColor();
+      
+      // Redraw if canvas is already initialized
+      if (this.#ctx) {
+        this.#draw();
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
     this.#initSetup();
@@ -38,7 +54,10 @@ export class Canvas implements AfterViewInit {
   }
 
   #drawSnapshot() {
-    drawBackground(this.#ctx, canvasUi.backgroundColor, canvas.width, canvas.height);
+    const bgColor = this.colorConfig.backgroundColor();
+    const textColor = this.colorConfig.textColor();
+
+    drawBackground(this.#ctx, bgColor, canvas.width, canvas.height);
     drawAvatar(this.#ctx, this.canvasData().avatarUrl, Q2.x, Q2.y, quadrant.width, quadrant.height);
     drawRepoInfo(
       this.#ctx,
@@ -49,6 +68,7 @@ export class Canvas implements AfterViewInit {
       Q1.y,
       quadrant.width,
       quadrant.height,
+      textColor,
     );
     drawStats(
       this.#ctx,
@@ -61,6 +81,7 @@ export class Canvas implements AfterViewInit {
       Q3.y,
       quadrant.width,
       quadrant.height,
+      textColor,
     );
     drawTopLanguages(this.#ctx, this.canvasData().topLanguages, Q4.x, Q4.y, quadrant.width, quadrant.height);
     drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);

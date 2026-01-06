@@ -19,3 +19,8 @@ export type ApiResponse<T> = {
   error?: string;
   data?: T;
 };
+
+export interface ColorConfig {
+  backgroundColor: string;
+  textColor: string;
+}
