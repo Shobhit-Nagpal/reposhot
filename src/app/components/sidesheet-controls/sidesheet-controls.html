@@ -1,0 +1,30 @@
+<div class="flex flex-col space-y-8">
+  <div>
+    <h1 class="text-3xl font-bold">Customize</h1>
+  </div>
+  <div class="flex flex-col space-y-4">
+    <label class="block">
+      Background color
+      <input type="color" (input)="onBackgroundColorChange($event)" />
+    </label>
+    <label class="block">
+      Border color
+      <input type="color" (input)="onBorderColorChange($event)" />
+    </label>
+    <label class="block">
+      Primary text color
+      <input type="color" (input)="onPrimaryTextColorChange($event)" />
+    </label>
+    <label class="block">
+      Secondary text color
+      <input type="color" (input)="onSecondaryTextColorChange($event)" />
+    </label>
+    <button
+      matButton="outlined"
+      class="w-full h-12 text-base font-medium"
+      (click)="downloadImage()"
+    >
+      Download
+    </button>
+  </div>
+</div>

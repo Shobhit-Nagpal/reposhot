@@ -1,9 +1,16 @@
-import { Repository } from '@/types';
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { CanvasState, Repository } from '@/types';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   canvas,
-  canvasUi,
   drawAvatar,
   drawBackground,
   drawLogo,
@@ -16,10 +23,14 @@ import {
   Q4,
   quadrant,
 } from './canvas.utils';
+import { StoreService } from '@/app/services/store/store.service';
+import { Sidesheet } from '../sidesheet-controls/sidesheet-controls';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'reposhot-canvas',
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, Sidesheet, MatSidenavModule, MatIconModule],
   templateUrl: './canvas.html',
 })
 export class Canvas implements AfterViewInit {
@@ -29,22 +40,43 @@ export class Canvas implements AfterViewInit {
   #ctx: CanvasRenderingContext2D;
   #imageName = 'reposhot-image.png';
 
+  #storeService = inject(StoreService);
+
+  constructor() {
+    effect(() => {
+      const state = this.#storeService.state();
+      if (this.#ctx) {
+        this.#draw(state);
+      }
+    });
+  }
+
   ngAfterViewInit(): void {
     this.#initSetup();
   }
 
-  #draw() {
-    this.#drawSnapshot();
+  #draw(state: CanvasState) {
+    this.#drawSnapshot(state);
   }
 
-  #drawSnapshot() {
-    drawBackground(this.#ctx, canvasUi.backgroundColor, canvas.width, canvas.height);
-    drawAvatar(this.#ctx, this.canvasData().avatarUrl, Q2.x, Q2.y, quadrant.width, quadrant.height);
+  #drawSnapshot(state: CanvasState) {
+    drawBackground(this.#ctx, state.backgroundColor, canvas.width, canvas.height);
+    drawAvatar(
+      this.#ctx,
+      this.canvasData().avatarUrl,
+      this.#storeService.state().borderColor,
+      Q2.x,
+      Q2.y,
+      quadrant.width,
+      quadrant.height,
+    );
     drawRepoInfo(
       this.#ctx,
       this.canvasData().owner,
       this.canvasData().name,
       this.canvasData().description,
+      state.primaryTextColor,
+      state.secondaryTextColor,
       Q1.x,
       Q1.y,
       quadrant.width,
@@ -62,7 +94,14 @@ export class Canvas implements AfterViewInit {
       quadrant.width,
       quadrant.height,
     );
-    drawTopLanguages(this.#ctx, this.canvasData().topLanguages, Q4.x, Q4.y, quadrant.width, quadrant.height);
+    drawTopLanguages(
+      this.#ctx,
+      this.canvasData().topLanguages,
+      Q4.x,
+      Q4.y,
+      quadrant.width,
+      quadrant.height,
+    );
     drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);
   }
 
@@ -87,7 +126,7 @@ export class Canvas implements AfterViewInit {
 
   #initSetup() {
     this.#setupCanvas();
-    this.#draw();
+    this.#draw(this.#storeService.state());
   }
 
   downloadImage() {

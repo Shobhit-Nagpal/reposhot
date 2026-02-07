@@ -19,3 +19,10 @@ export type ApiResponse<T> = {
   error?: string;
   data?: T;
 };
+
+export type CanvasState = {
+  backgroundColor: string;
+  borderColor: string;
+  primaryTextColor: string;
+  secondaryTextColor: string;
+}

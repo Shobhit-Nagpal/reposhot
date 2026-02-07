@@ -1,5 +1,6 @@
-import { devIconsCdn, languageIconsMap } from '@/data';
+import { devIconsCdn } from '@/data';
 import { mapLanguageToSvg } from '@/utils/mapping';
+import { canvasUi } from '@/utils/canvas';
 
 const iconPaths = {
   star: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXItaWNvbiBsdWNpZGUtc3RhciI+PHBhdGggZD0iTTExLjUyNSAyLjI5NWEuNTMuNTMgMCAwIDEgLjk1IDBsMi4zMSA0LjY3OWEyLjEyMyAyLjEyMyAwIDAgMCAxLjU5NSAxLjE2bDUuMTY2Ljc1NmEuNTMuNTMgMCAwIDEgLjI5NC45MDRsLTMuNzM2IDMuNjM4YTIuMTIzIDIuMTIzIDAgMCAwLS42MTEgMS44NzhsLjg4MiA1LjE0YS41My41MyAwIDAgMS0uNzcxLjU2bC00LjYxOC0yLjQyOGEyLjEyMiAyLjEyMiAwIDAgMC0xLjk3MyAwTDYuMzk2IDIxLjAxYS41My41MyAwIDAgMS0uNzctLjU2bC44ODEtNS4xMzlhMi4xMjIgMi4xMjIgMCAwIDAtLjYxMS0xLjg3OUwyLjE2IDkuNzk1YS41My41MyAwIDAgMSAuMjk0LS45MDZsNS4xNjUtLjc1NWEyLjEyMiAyLjEyMiAwIDAgMCAxLjU5Ny0xLjE2eiIvPjwvc3ZnPg==',
@@ -12,14 +13,6 @@ const statIcons = {
   star: createIconImage(iconPaths.star),
   fork: createIconImage(iconPaths.fork),
   issues: createIconImage(iconPaths.issues),
-};
-
-export const canvasUi = {
-  backgroundColor: '#0D1117',
-  borderColor: '#e1e4e8',
-  primaryTextColor: '#ffffff',
-  secondaryTextColor: '#f9fafb',
-  padding: 60,
 };
 
 export const canvas = { width: 1200, height: 630 };
@@ -47,6 +40,7 @@ export function drawBackground(
 export function drawAvatar(
   ctx: CanvasRenderingContext2D,
   imageUrl: string,
+  borderColor: string,
   quadrantX: number,
   quadrantY: number,
   quadrantW: number,
@@ -77,7 +71,7 @@ export function drawAvatar(
 
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = canvasUi.borderColor;
+    ctx.strokeStyle = borderColor;
     ctx.lineWidth = 3;
     ctx.stroke();
   };
@@ -90,6 +84,8 @@ export function drawRepoInfo(
   username: string,
   repoName: string,
   description: string = '',
+  primaryTextColor: string,
+  secondaryTextColor: string,
   quadrantX: number,
   quadrantY: number,
   quadrantW: number,
@@ -129,7 +125,7 @@ export function drawRepoInfo(
 
   // Line 1: Username + separator
   ctx.font = usernameFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = secondaryTextColor;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText(username + ' / ', startX, currentY);
@@ -137,14 +133,14 @@ export function drawRepoInfo(
 
   // Line 2: Repo name
   ctx.font = repoFont;
-  ctx.fillStyle = canvasUi.primaryTextColor;
+  ctx.fillStyle = primaryTextColor;
   const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
 
   // Description block (truncated)
   ctx.font = descFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = secondaryTextColor;
   visibleDescLines.forEach((line) => {
     ctx.fillText(line, startX, currentY);
     currentY += lineHeightPx;
