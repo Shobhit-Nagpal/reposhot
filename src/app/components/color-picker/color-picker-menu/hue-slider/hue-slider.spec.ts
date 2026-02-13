@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidesheetControls } from './sidesheet-controls';
+import { HueSlider } from './hue-slider';
 
-describe('SidesheetControls', () => {
-  let component: SidesheetControls;
-  let fixture: ComponentFixture<SidesheetControls>;
+describe('HueSlider', () => {
+  let component: HueSlider;
+  let fixture: ComponentFixture<HueSlider>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidesheetControls]
+      imports: [HueSlider]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SidesheetControls);
+    fixture = TestBed.createComponent(HueSlider);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

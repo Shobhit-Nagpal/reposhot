@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidesheetControls } from './sidesheet-controls';
+import { AlphaSlider } from './alpha-slider';
 
-describe('SidesheetControls', () => {
-  let component: SidesheetControls;
-  let fixture: ComponentFixture<SidesheetControls>;
+describe('AlphaSlider', () => {
+  let component: AlphaSlider;
+  let fixture: ComponentFixture<AlphaSlider>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidesheetControls]
+      imports: [AlphaSlider]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SidesheetControls);
+    fixture = TestBed.createComponent(AlphaSlider);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

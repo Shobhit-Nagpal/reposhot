@@ -1,19 +1,22 @@
 import { StoreService } from '@/app/services/store/store.service';
-import { Component, ElementRef, inject, input } from '@angular/core';
+import { Component, computed, ElementRef, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ColorPicker } from '../color-picker/color-picker';
 
 @Component({
   selector: 'reposhot-sidesheet-controls',
-  imports: [MatSidenavModule, MatButtonModule],
+  imports: [MatSidenavModule, MatButtonModule, ColorPicker],
   templateUrl: './sidesheet-controls.html',
   styleUrl: './sidesheet-controls.css',
 })
-export class Sidesheet {
+export class SidesheetControls {
   canvasEl = input.required<ElementRef<HTMLCanvasElement>>();
   #imageName = 'reposhot-image.png';
 
   #storeService = inject(StoreService);
+
+  backgroundColor = computed(() => this.#storeService.state().backgroundColor);
 
   protected downloadImage() {
     const canvasURL = this.canvasEl().nativeElement.toDataURL();

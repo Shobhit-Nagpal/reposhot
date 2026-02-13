@@ -24,13 +24,13 @@ import {
   quadrant,
 } from './canvas.utils';
 import { StoreService } from '@/app/services/store/store.service';
-import { Sidesheet } from '../sidesheet-controls/sidesheet-controls';
+import { SidesheetControls } from '../sidesheet-controls/sidesheet-controls';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'reposhot-canvas',
-  imports: [MatButtonModule, Sidesheet, MatSidenavModule, MatIconModule],
+  imports: [MatButtonModule, SidesheetControls, MatSidenavModule, MatIconModule],
   templateUrl: './canvas.html',
 })
 export class Canvas implements AfterViewInit {

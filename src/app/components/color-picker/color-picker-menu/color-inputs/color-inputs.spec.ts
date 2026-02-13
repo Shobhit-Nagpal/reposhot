@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidesheetControls } from './sidesheet-controls';
+import { ColorInputs } from './color-inputs';
 
-describe('SidesheetControls', () => {
-  let component: SidesheetControls;
-  let fixture: ComponentFixture<SidesheetControls>;
+describe('ColorInputs', () => {
+  let component: ColorInputs;
+  let fixture: ComponentFixture<ColorInputs>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidesheetControls]
+      imports: [ColorInputs]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SidesheetControls);
+    fixture = TestBed.createComponent(ColorInputs);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
