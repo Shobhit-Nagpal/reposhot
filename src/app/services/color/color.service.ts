@@ -1,20 +1,67 @@
 import { ColorEngine } from '@/core/color-engine/engine';
-import { ColorModel } from '@/types';
-import { computed, Injectable } from '@angular/core';
+import { Hex, HSL, RGB } from '@/types';
+import { effect, Injectable, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ColorService {
+  #state = signal('');
   #engine = new ColorEngine();
 
-  currentColor = computed(() => this.#engine.state);
+  currentColor = this.#state.asReadonly();
 
-  setColor(color: ColorModel) {
-    this.#engine.state = color;
+  constructor() {
+    // Init state
+    this.#state.set(this.#engine.hslToHex(this.#engine.state));
+
+    // Keep engine and service state in sync
+    effect(() => {
+      const state = this.#state();
+      const rgb = this.#engine.hexToRgb(state);
+      const hsl = this.#engine.rgbToHsl(rgb);
+
+      this.#engine.state = hsl;
+    });
   }
 
-  convertToRgb() {
-    return this.#engine.hslToRgb(this.#engine.state);
+  set(hex: string) {
+    this.#state.set(hex);
+  }
+
+  setHue(h: number) {
+    const hsl = this.hsl();
+    hsl.h = h;
+
+    const hex = this.#engine.hslToHex(hsl);
+
+    this.#state.set(hex);
+  }
+
+  setAlpha(a: number) {
+    const hsl = this.hsl();
+    hsl.a = a;
+
+    const hex = this.#engine.hslToHex(hsl);
+
+    this.#state.set(hex);
+  }
+
+  rgb(): RGB {
+    return this.#engine.hexToRgb(this.#state());
+  }
+
+  hex(): Hex {
+    return this.#state();
+  }
+
+  hsl(): HSL {
+    return this.#hexToHsl(this.#state());
+  }
+
+  alpha(): number {
+    return this.#hexToHsl(this.#state()).a ?? 1;
+  }
+
+  #hexToHsl(hex: string): HSL {
+    return this.#engine.rgbToHsl(this.#engine.hexToRgb(hex));
   }
 }

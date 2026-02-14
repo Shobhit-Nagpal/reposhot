@@ -1,3 +1,4 @@
-<mat-slider>
-  <input matSliderThumb />
+<mat-slider min="0" max="360" step="1">
+  <label>Hue</label>
+  <input matSliderThumb [value]="hue()" (input)="onSliderInputChange($event)" />
 </mat-slider>

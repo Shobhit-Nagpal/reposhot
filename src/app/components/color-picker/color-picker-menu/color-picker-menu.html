@@ -1,10 +1,8 @@
 <div class="px-6 py-4">
-  <div class="flex flex-col item-center justify-center">
-    <reposhot-hue-slider></reposhot-hue-slider>
-    <reposhot-alpha-slider></reposhot-alpha-slider>
-  </div>
-  <div class="flex gap-4 items-center justify-center">
-    <button matButton (click)="onCancel()">Cancel</button>
-    <button matButton (click)="onCancel()" cdkFocusInitial>Ok</button>
+  <div class="flex flex-col item-center justify-center space-y-4">
+    <reposhot-gradient-picker [hue]="hue()"></reposhot-gradient-picker>
+    <reposhot-hue-slider [value]="hue()"></reposhot-hue-slider>
+    <reposhot-alpha-slider [value]="alpha()"></reposhot-alpha-slider>
+    <reposhot-color-inputs [value]="value()"></reposhot-color-inputs>
   </div>
 </div>

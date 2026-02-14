@@ -16,7 +16,7 @@ export class SidesheetControls {
 
   #storeService = inject(StoreService);
 
-  backgroundColor = computed(() => this.#storeService.state().backgroundColor);
+  state = computed(() => this.#storeService.state());
 
   protected downloadImage() {
     const canvasURL = this.canvasEl().nativeElement.toDataURL();
@@ -27,31 +27,34 @@ export class SidesheetControls {
     el.remove();
   }
 
-  protected onBackgroundColorChange(event: Event) {
-    const bgColor = (event.target as HTMLInputElement).value;
+  protected onBackgroundColorChange(color: string) {
     this.#storeService.updateState({
-      backgroundColor: bgColor,
+      backgroundColor: color,
     });
   }
 
-  protected onBorderColorChange(event: Event) {
-    const borderColor = (event.target as HTMLInputElement).value;
+  protected onBackgroundColorAlphaChange(alpha: number) {
+    console.log('sup')
     this.#storeService.updateState({
-      borderColor: borderColor,
+      backgroundColorAlpha: alpha,
     });
   }
 
-  protected onPrimaryTextColorChange(event: Event) {
-    const pTextColor = (event.target as HTMLInputElement).value;
+  protected onBorderColorChange(color: string) {
     this.#storeService.updateState({
-      primaryTextColor: pTextColor,
+      borderColor: color,
     });
   }
 
-  protected onSecondaryTextColorChange(event: Event) {
-    const sTextColor = (event.target as HTMLInputElement).value;
+  protected onPrimaryTextColorChange(color: string) {
     this.#storeService.updateState({
-      secondaryTextColor: sTextColor,
+      primaryTextColor: color,
+    });
+  }
+
+  protected onSecondaryTextColorChange(color: string) {
+    this.#storeService.updateState({
+      secondaryTextColor: color,
     });
   }
 }

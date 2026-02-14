@@ -69,6 +69,7 @@ export class Canvas implements AfterViewInit {
       Q2.y,
       quadrant.width,
       quadrant.height,
+      this.#storeService.state().borderColorAlpha,
     );
     drawRepoInfo(
       this.#ctx,
@@ -81,6 +82,8 @@ export class Canvas implements AfterViewInit {
       Q1.y,
       quadrant.width,
       quadrant.height,
+      this.#storeService.state().primaryTextColorAlpha,
+      this.#storeService.state().secondaryTextColorAlpha,
     );
     drawStats(
       this.#ctx,
@@ -93,6 +96,7 @@ export class Canvas implements AfterViewInit {
       Q3.y,
       quadrant.width,
       quadrant.height,
+      this.#storeService.state().secondaryTextColorAlpha,
     );
     drawTopLanguages(
       this.#ctx,

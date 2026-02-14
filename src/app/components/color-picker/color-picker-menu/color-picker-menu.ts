@@ -1,38 +1,36 @@
-import { Component, computed, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output } from '@angular/core';
 import { HueSlider } from './hue-slider/hue-slider';
+import { ColorInputs } from './color-inputs/color-inputs';
+import { GradientPicker } from './gradient-picker/gradient-picker';
+import { ColorService } from '@/app/services/color/color.service';
 import { AlphaSlider } from './alpha-slider/alpha-slider';
 
 @Component({
   selector: 'reposhot-color-picker-menu',
-  imports: [HueSlider, AlphaSlider],
+  imports: [HueSlider, ColorInputs, GradientPicker, AlphaSlider],
   templateUrl: './color-picker-menu.html',
 })
-export class ColorPickerMenu {
-  value = model('');
+export class ColorPickerMenu implements OnInit {
+  value = input.required<string>();
+  valueChange = output<string>();
+  alphaChange = output<number>();
 
-  // Signals to pick up from children
-  hue = signal(0);
-  saturation = signal(0);
-  lightness = signal(0);
+  #colorService = inject(ColorService);
 
-  previewValue = computed(() =>
-    this.#calculateHexValue(this.hue(), this.saturation(), this.lightness()),
-  );
+  hue = computed(() => this.#colorService.hsl().h);
+  alpha = computed(() => this.#colorService.hsl().l);
 
-  #calculateHexValue(h: number, s: number, l: number) {
-    l /= 100;
-    const a = (s * Math.min(l, 1 - l)) / 100;
-    const f = (n: number) => {
-      const k = (n + h / 30) % 12;
-      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-      return Math.round(255 * color)
-        .toString(16)
-        .padStart(2, '0'); // convert to Hex and prefix "0" if needed
-    };
-    return `#${f(0)}${f(8)}${f(4)}`;
+  constructor() {
+    effect(() => {
+      this.valueChange.emit(this.#colorService.currentColor());
+    });
+
+    effect(() => {
+      this.alphaChange.emit(this.alpha());
+    });
   }
 
-  protected onCancel() {}
-
-  protected onSave() {}
+  ngOnInit(): void {
+    this.#colorService.set(this.value());
+  }
 }

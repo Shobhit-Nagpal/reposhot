@@ -1,3 +1,4 @@
-<mat-slider>
-  <input matSliderThumb />
+<mat-slider min="0" max="1" step="0.1">
+  <label>Alpha</label>
+  <input matSliderThumb [value]="alpha()" (input)="onSliderInputChange($event)" />
 </mat-slider>

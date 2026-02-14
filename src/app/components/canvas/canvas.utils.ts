@@ -32,9 +32,14 @@ export function drawBackground(
   bgColor: string,
   canvasWidth: number,
   canvasHeight: number,
+  alpha = 1,
 ) {
+  ctx.globalAlpha = alpha;
+
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  ctx.globalAlpha = 1;
 }
 
 export function drawAvatar(
@@ -45,7 +50,10 @@ export function drawAvatar(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
+  alpha = 1,
 ) {
+  ctx.globalAlpha = alpha;
+
   // 1. Calculate center position within quadrant
   const centerX = quadrantX + canvasUi.padding + quadrantW / 2;
   const centerY = quadrantY + quadrantH / 1.5;
@@ -77,6 +85,8 @@ export function drawAvatar(
   };
 
   img.src = imageUrl;
+
+  ctx.globalAlpha = 1;
 }
 
 export function drawRepoInfo(
@@ -90,6 +100,8 @@ export function drawRepoInfo(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
+  primaryTextAlpha = 1,
+  secondaryTextAlpha = 1,
 ) {
   const padding = canvasUi.padding;
   const maxWidth = quadrantW - padding * 2;
@@ -123,6 +135,8 @@ export function drawRepoInfo(
   let currentY = quadrantY + (quadrantH - totalHeight);
   const startX = quadrantX + padding;
 
+  ctx.globalAlpha = secondaryTextAlpha;
+
   // Line 1: Username + separator
   ctx.font = usernameFont;
   ctx.fillStyle = secondaryTextColor;
@@ -131,12 +145,16 @@ export function drawRepoInfo(
   ctx.fillText(username + ' / ', startX, currentY);
   currentY += usernameFontSize;
 
+  ctx.globalAlpha = primaryTextAlpha;
+
   // Line 2: Repo name
   ctx.font = repoFont;
   ctx.fillStyle = primaryTextColor;
   const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
+
+  ctx.globalAlpha = secondaryTextAlpha;
 
   // Description block (truncated)
   ctx.font = descFont;
@@ -145,6 +163,8 @@ export function drawRepoInfo(
     ctx.fillText(line, startX, currentY);
     currentY += lineHeightPx;
   });
+
+  ctx.globalAlpha = 1;
 }
 
 function wrapRepoName(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
@@ -201,6 +221,7 @@ export function drawStats(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
+  secondarTextAlpha = 1,
 ) {
   const { stars, forks, issues } = stats;
 
@@ -219,7 +240,7 @@ export function drawStats(
     const itemX = quadrantX + index * itemWidth;
     const itemCenterX = itemX + itemWidth / 2;
 
-    drawStatItem(ctx, stat, itemCenterX, centerY);
+    drawStatItem(ctx, stat, itemCenterX, centerY, secondarTextAlpha);
   });
 }
 
@@ -228,6 +249,7 @@ function drawStatItem(
   stat: { icon: HTMLImageElement; value: number; label: string },
   centerX: number,
   centerY: number,
+  secondaryTextAlpha = 1,
 ) {
   const iconSize = 24;
   const numberFont = 'bold 24px sans-serif';
@@ -254,6 +276,8 @@ function drawStatItem(
   const totalHeight = topRowHeight + numberLabelGap + 16; // 16 is label font size
   const startY = centerY - totalHeight / 2;
 
+  ctx.globalAlpha = secondaryTextAlpha;
+
   // Draw icon
   ctx.drawImage(stat.icon, topRowStartX, startY, iconSize, iconSize);
 
@@ -269,6 +293,8 @@ function drawStatItem(
   ctx.fillStyle = canvasUi.secondaryTextColor;
   ctx.textAlign = 'left';
   ctx.fillText(stat.label, labelStartX, startY + topRowHeight + numberLabelGap);
+
+  ctx.globalAlpha = 1;
 }
 
 export function drawLogo(

@@ -25,6 +25,10 @@ export type CanvasState = {
   borderColor: string;
   primaryTextColor: string;
   secondaryTextColor: string;
+  backgroundColorAlpha?: number;
+  borderColorAlpha?: number;
+  primaryTextColorAlpha?: number;
+  secondaryTextColorAlpha?: number;
 }
 
 /*
@@ -41,6 +45,7 @@ export type HSL = {
   h: number;
   s: number;
   l: number;
+  a?: number;
   __type: ModelType.HSL;
 }
 
@@ -50,3 +55,7 @@ export enum ModelType {
   HSL = 'hsl',
   RGB = 'rgb',
 }
+
+export type ColorInputMode = 'RGB' | 'HSL' | 'HEX';
+
+export type Hex = string;

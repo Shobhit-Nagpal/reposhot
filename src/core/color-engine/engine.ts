@@ -1,10 +1,11 @@
-import { ColorModel, HSL, ModelType, RGB } from '@/types';
+import { ColorModel, Hex, HSL, ModelType, RGB } from '@/types';
 import { capitalize } from '@/utils/misc';
 
 const initState: HSL = {
   h: 0,
-  s: 0,
-  l: 0,
+  s: 1,
+  l: 1,
+  a: 1,
   __type: ModelType.HSL,
 };
 
@@ -25,7 +26,7 @@ export class ColorEngine {
         this.#state = newState;
         break;
       case ModelType.RGB:
-        this.#state = this.rgbToHsl(newState)
+        this.#state = this.rgbToHsl(newState);
         break;
       default:
         throw new NotSupportedError('Color model');
@@ -92,7 +93,7 @@ export class ColorEngine {
    * Source: https://www.rapidtables.com/convert/color/rgb-to-hsl.html
    * (R, G, B) are integers, not decimals
    */
-  rgbToHsl(color: RGB): HSL {
+  rgbToHsl(color: RGB, alpha?: number): HSL {
     const _r = color.r / 255;
     const _g = color.g / 255;
     const _b = color.b / 255;
@@ -142,8 +143,61 @@ export class ColorEngine {
       h,
       s,
       l,
+      a: alpha ?? 1,
       __type: ModelType.HSL,
     };
+  }
+  /*
+   * Conversion of HSL to Hex color model
+   * There's no direct conversion from HSL -> Hex. So we have RGB as the intermediate state
+   */
+  hslToHex(color: HSL): Hex {
+    const rgb = this.hslToRgb(color);
+    return this.rgbToHex(rgb);
+  }
+
+  /*
+   * Conversion of RGB to Hex color model
+   * They are the same format, only the base is different
+   * RGB is base-10 ; Hex is base-16
+   */
+  rgbToHex(color: RGB): Hex {
+    const hexR = color.r.toString(16);
+    const hexG = color.g.toString(16);
+    const hexB = color.b.toString(16);
+
+    const hex = `#${hexR}${hexG}${hexB}`;
+
+    return hex;
+  }
+
+  /*
+   * Conversion of Hex to RGB color model
+   * They are the same format, only the base is different
+   * Defaults to white in RGB in case of error
+   * Source: https://stackoverflow.com/a/5624139
+   */
+  hexToRgb(hex: Hex): RGB {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (_m, r, g, b) {
+      return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+          __type: ModelType.RGB,
+        }
+      : {
+          r: 255,
+          g: 255,
+          b: 255,
+          __type: ModelType.RGB,
+        };
   }
 }
 
