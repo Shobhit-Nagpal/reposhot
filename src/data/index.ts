@@ -32,6 +32,8 @@ export const languageIconsMap: Record<string, string> = {
   elixir: 'elixir/elixir-original.svg',
   php: 'php/php-original.svg',
   java: 'java/java-original.svg',
+  gleam: 'gleam/gleam-original.svg',
+  erlang: 'erlang/erlang-original.svg',
 };
 
 export const devIconsCdn = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
