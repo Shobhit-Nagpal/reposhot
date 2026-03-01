@@ -93,6 +93,25 @@ describe('ColorEngine', () => {
     ],
   ];
 
+  const hexToRgbTests: Array<[string, RGB]> = [
+    ['#000000', { r: 0, g: 0, b: 0, __type: ModelType.RGB }], // Black
+    ['#FFFFFF', { r: 255, g: 255, b: 255, __type: ModelType.RGB }], // White
+    ['#FF0000', { r: 255, g: 0, b: 0, __type: ModelType.RGB }], // Red
+    ['#00FF00', { r: 0, g: 255, b: 0, __type: ModelType.RGB }], // Green (Lime)
+    ['#0000FF', { r: 0, g: 0, b: 255, __type: ModelType.RGB }], // Blue
+    ['#FFFF00', { r: 255, g: 255, b: 0, __type: ModelType.RGB }], // Yellow
+    ['#00FFFF', { r: 0, g: 255, b: 255, __type: ModelType.RGB }], // Cyan
+    ['#FF00FF', { r: 255, g: 0, b: 255, __type: ModelType.RGB }], // Magenta
+    ['#C0C0C0', { r: 192, g: 192, b: 192, __type: ModelType.RGB }], // Silver
+    ['#808080', { r: 128, g: 128, b: 128, __type: ModelType.RGB }], // Gray
+    ['#800000', { r: 128, g: 0, b: 0, __type: ModelType.RGB }], // Maroon
+    ['#808000', { r: 128, g: 128, b: 0, __type: ModelType.RGB }], // Olive
+    ['#008000', { r: 0, g: 128, b: 0, __type: ModelType.RGB }], // Green
+    ['#800080', { r: 128, g: 0, b: 128, __type: ModelType.RGB }], // Purple
+    ['#008080', { r: 0, g: 128, b: 128, __type: ModelType.RGB }], // Teal
+    ['#000080', { r: 0, g: 0, b: 128, __type: ModelType.RGB }], // Navy
+  ];
+
   describe('HSL to RGB Conversion', () => {
     conversionTests.forEach(([hsl, expected]) => {
       it('should convert hsl to rgb', () => {
@@ -117,6 +136,34 @@ describe('ColorEngine', () => {
 
         // Assert
         expect(isSameColor(hsl, expected)).toBe(true);
+      });
+    });
+  });
+
+  describe('Hex to RGB Conversion', () => {
+    hexToRgbTests.forEach(([hex, expected]) => {
+      it('should convert rgb to hsl', () => {
+        // Arrange
+
+        // Act
+        const rgb = engine.hexToRgb(hex);
+
+        // Assert
+        expect(isSameColor(rgb, expected)).toBe(true);
+      });
+    });
+  });
+
+  describe('RGB to Hex Conversion', () => {
+    hexToRgbTests.forEach(([expected, rgb]) => {
+      it('should convert rgb to hsl', () => {
+        // Arrange
+
+        // Act
+        const hex = engine.rgbToHex(rgb);
+
+        // Assert
+        expect(hex.toLowerCase()).toBe(expected.toLowerCase());
       });
     });
   });

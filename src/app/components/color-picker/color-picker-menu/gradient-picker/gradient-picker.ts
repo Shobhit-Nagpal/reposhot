@@ -19,7 +19,17 @@ export class GradientPicker implements OnInit {
     this.#isMouseDown = true;
   }
 
-  onMouseUp(_e: MouseEvent) {
+  onMouseUp(e: MouseEvent) {
+    const [x, y] = this.#calculateMouseEventCoords(e);
+
+    if (this.cursorX() !== x) {
+      this.cursorX.set(x);
+    }
+
+    if (this.cursorY() !== y) {
+      this.cursorY.set(y);
+    }
+
     this.#isMouseDown = false;
   }
 
@@ -32,6 +42,14 @@ export class GradientPicker implements OnInit {
       return;
     }
 
+    const [x, y] = this.#calculateMouseEventCoords(e);
+
+    // Clamp to 0-100
+    this.cursorX.set(Math.max(0, Math.min(100, x)));
+    this.cursorY.set(Math.max(0, Math.min(100, y)));
+  }
+
+  #calculateMouseEventCoords(e: MouseEvent) {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 
     // X: distance from left edge / total width
@@ -40,9 +58,7 @@ export class GradientPicker implements OnInit {
     // Y: distance from top edge / total height
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    // Clamp to 0-100
-    this.cursorX.set(Math.max(0, Math.min(100, x)));
-    this.cursorY.set(Math.max(0, Math.min(100, y)));
+    return [x, y];
   }
 
   ngOnInit(): void {

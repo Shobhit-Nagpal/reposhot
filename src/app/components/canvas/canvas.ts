@@ -60,16 +60,16 @@ export class Canvas implements AfterViewInit {
   }
 
   #drawSnapshot(state: CanvasState) {
-    drawBackground(this.#ctx, state.backgroundColor, canvas.width, canvas.height);
+    drawBackground(this.#ctx, state.backgroundColor, canvas.width, canvas.height, state.backgroundColorAlpha);
     drawAvatar(
       this.#ctx,
       this.canvasData().avatarUrl,
-      this.#storeService.state().borderColor,
+      state.borderColor,
       Q2.x,
       Q2.y,
       quadrant.width,
       quadrant.height,
-      this.#storeService.state().borderColorAlpha,
+      state.borderColorAlpha,
     );
     drawRepoInfo(
       this.#ctx,
@@ -82,8 +82,8 @@ export class Canvas implements AfterViewInit {
       Q1.y,
       quadrant.width,
       quadrant.height,
-      this.#storeService.state().primaryTextColorAlpha,
-      this.#storeService.state().secondaryTextColorAlpha,
+      state.primaryTextColorAlpha,
+      state.secondaryTextColorAlpha,
     );
     drawStats(
       this.#ctx,
@@ -96,7 +96,7 @@ export class Canvas implements AfterViewInit {
       Q3.y,
       quadrant.width,
       quadrant.height,
-      this.#storeService.state().secondaryTextColorAlpha,
+      state.secondaryTextColorAlpha,
     );
     drawTopLanguages(
       this.#ctx,

@@ -34,7 +34,6 @@ export class SidesheetControls {
   }
 
   protected onBackgroundColorAlphaChange(alpha: number) {
-    console.log('sup')
     this.#storeService.updateState({
       backgroundColorAlpha: alpha,
     });

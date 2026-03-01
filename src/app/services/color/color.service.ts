@@ -28,19 +28,19 @@ export class ColorService {
   }
 
   setHue(h: number) {
-    const hsl = this.hsl();
-    hsl.h = h;
-
-    const hex = this.#engine.hslToHex(hsl);
+    const hex = this.#engine.hslToHex({
+      ...this.hsl(),
+      h
+    });
 
     this.#state.set(hex);
   }
 
   setAlpha(a: number) {
-    const hsl = this.hsl();
-    hsl.a = a;
-
-    const hex = this.#engine.hslToHex(hsl);
+    const hex = this.#engine.hslToHex({
+      ...this.hsl(),
+      a
+    });
 
     this.#state.set(hex);
   }

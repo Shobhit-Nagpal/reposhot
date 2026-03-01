@@ -23,7 +23,7 @@ export class ColorInputs implements OnInit {
 
   protected onInputChange(e: Event) {
     const value = (e.target as HTMLInputElement).value;
-    if (value.length !== 7) {
+    if (value.length < 6) {
       return;
     } else {
       this.#colorService.set(this.#ensureHash(value));

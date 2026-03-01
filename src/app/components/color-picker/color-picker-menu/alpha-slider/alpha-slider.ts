@@ -1,5 +1,5 @@
 import { ColorService } from '@/app/services/color/color.service';
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
@@ -13,12 +13,6 @@ export class AlphaSlider {
   alpha = signal<number>(0);
 
   #colorService = inject(ColorService);
-
-  constructor() {
-    effect(() => {
-      this.alpha.set(this.#colorService.hsl().a ?? 1);
-    });
-  }
 
   onSliderInputChange(e: Event) {
     const value = parseFloat((e.target as HTMLInputElement).value);

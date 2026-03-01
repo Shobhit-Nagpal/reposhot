@@ -1,5 +1,5 @@
 import { ColorService } from '@/app/services/color/color.service';
-import { Component, effect, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
@@ -13,12 +13,6 @@ export class HueSlider implements OnInit {
   hue = signal<number>(0);
 
   #colorService = inject(ColorService);
-
-  constructor() {
-    effect(() => {
-      this.hue.set(this.#colorService.hsl().h);
-    });
-  }
 
   onSliderInputChange(e: Event) {
     const value = parseInt((e.target as HTMLInputElement).value);

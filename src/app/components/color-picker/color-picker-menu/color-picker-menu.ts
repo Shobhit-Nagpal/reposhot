@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, OnInit, output } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, output } from '@angular/core';
 import { HueSlider } from './hue-slider/hue-slider';
 import { ColorInputs } from './color-inputs/color-inputs';
 import { GradientPicker } from './gradient-picker/gradient-picker';
@@ -18,7 +18,7 @@ export class ColorPickerMenu implements OnInit {
   #colorService = inject(ColorService);
 
   hue = computed(() => this.#colorService.hsl().h);
-  alpha = computed(() => this.#colorService.hsl().l);
+  alpha = computed(() => this.#colorService.hsl().a ?? 1);
 
   constructor() {
     effect(() => {
@@ -26,7 +26,7 @@ export class ColorPickerMenu implements OnInit {
     });
 
     effect(() => {
-      this.alphaChange.emit(this.alpha());
+      this.alphaChange.emit(this.alpha() ?? 1);
     });
   }
 

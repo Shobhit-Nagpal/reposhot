@@ -3,8 +3,8 @@ import { capitalize } from '@/utils/misc';
 
 const initState: HSL = {
   h: 0,
-  s: 1,
-  l: 1,
+  s: 0,
+  l: 0.5,
   a: 1,
   __type: ModelType.HSL,
 };
@@ -162,9 +162,9 @@ export class ColorEngine {
    * RGB is base-10 ; Hex is base-16
    */
   rgbToHex(color: RGB): Hex {
-    const hexR = color.r.toString(16);
-    const hexG = color.g.toString(16);
-    const hexB = color.b.toString(16);
+    const hexR = color.r.toString(16).padStart(2, '0');
+    const hexG = color.g.toString(16).padStart(2, '0');
+    const hexB = color.b.toString(16).padStart(2, '0');
 
     const hex = `#${hexR}${hexG}${hexB}`;
 
