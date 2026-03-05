@@ -8,7 +8,6 @@ import { ColorPicker } from '../color-picker/color-picker';
   selector: 'reposhot-sidesheet-controls',
   imports: [MatSidenavModule, MatButtonModule, ColorPicker],
   templateUrl: './sidesheet-controls.html',
-  styleUrl: './sidesheet-controls.css',
 })
 export class SidesheetControls {
   canvasEl = input.required<ElementRef<HTMLCanvasElement>>();

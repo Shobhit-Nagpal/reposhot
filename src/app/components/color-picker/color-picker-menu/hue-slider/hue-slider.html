@@ -1,4 +1,6 @@
-<mat-slider min="0" max="360" step="1">
+<div class="flex flex-col">
   <label>Hue</label>
-  <input matSliderThumb [value]="hue()" (input)="onSliderInputChange($event)" />
-</mat-slider>
+  <mat-slider min="0" max="360" step="1">
+    <input matSliderThumb [value]="hue()" (input)="onSliderInputChange($event)" />
+  </mat-slider>
+</div>

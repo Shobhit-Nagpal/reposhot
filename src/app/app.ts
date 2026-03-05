@@ -5,10 +5,11 @@ import { Footer } from './components/footer/footer';
 import { Canvas } from './components/canvas/canvas';
 import { GithubForm } from './components/github-form/github-form';
 import { MaybeRepository } from '@/types';
+import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
   selector: 'reposhot-root',
-  imports: [RouterOutlet, Navbar, Footer, Canvas, GithubForm],
+  imports: [RouterOutlet, Navbar, Footer, Canvas, GithubForm, MatSliderModule],
   templateUrl: './app.html',
 })
 export class App {
