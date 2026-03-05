@@ -36,6 +36,24 @@ export class ColorService {
     this.#state.set(hex);
   }
 
+  setSaturation(s: number) {
+    const hex = this.#engine.hslToHex({
+      ...this.hsl(),
+      s
+    });
+
+    this.#state.set(hex);
+  }
+
+  setLightness(l: number) {
+    const hex = this.#engine.hslToHex({
+      ...this.hsl(),
+      l
+    });
+
+    this.#state.set(hex);
+  }
+
   setAlpha(a: number) {
     const hex = this.#engine.hslToHex({
       ...this.hsl(),

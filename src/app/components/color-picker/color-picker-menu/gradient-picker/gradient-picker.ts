@@ -22,13 +22,19 @@ export class GradientPicker implements OnInit {
   onMouseUp(e: MouseEvent) {
     const [x, y] = this.#calculateMouseEventCoords(e);
 
-    if (this.cursorX() !== x) {
-      this.cursorX.set(x);
+    const clampedX = Math.max(0, Math.min(100, x));
+    const clampedY = Math.max(0, Math.min(100, y));
+
+    if (this.cursorX() !== clampedX) {
+      this.cursorX.set(clampedX);
     }
 
-    if (this.cursorY() !== y) {
-      this.cursorY.set(y);
+    if (this.cursorY() !== clampedY) {
+      this.cursorY.set(clampedY);
     }
+
+    this.#colorService.setSaturation(clampedX / 100);
+    this.#colorService.setLightness(1 - clampedY / 100);
 
     this.#isMouseDown = false;
   }

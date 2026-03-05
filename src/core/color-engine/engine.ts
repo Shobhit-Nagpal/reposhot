@@ -152,6 +152,8 @@ export class ColorEngine {
    * There's no direct conversion from HSL -> Hex. So we have RGB as the intermediate state
    */
   hslToHex(color: HSL): Hex {
+    // SLIDER RESET BUG APPEARS HERE
+    // RGB VALUE IS COMING SAME UNDER HSL -> RGB CONVERSION
     const rgb = this.hslToRgb(color);
     return this.rgbToHex(rgb);
   }
