@@ -10,7 +10,7 @@ import { ColorPicker } from '../color-picker/color-picker';
   templateUrl: './sidesheet-controls.html',
 })
 export class SidesheetControls {
-  canvasEl = input.required<ElementRef<HTMLCanvasElement>>();
+  canvasEl = input.required<ElementRef<HTMLCanvasElement> | null>();
   imageName = input<string>('reposhot-image.png');
 
   #storeService = inject(StoreService);
@@ -18,7 +18,10 @@ export class SidesheetControls {
   state = computed(() => this.#storeService.state());
 
   protected downloadImage() {
-    const canvasURL = this.canvasEl().nativeElement.toDataURL();
+    const canvasURL = this.canvasEl()?.nativeElement?.toDataURL();
+    if (!canvasURL) {
+      return;
+    }
     const el = document.createElement('a');
     el.href = canvasURL;
     el.download = this.#ensurePngSuffix(this.imageName());
