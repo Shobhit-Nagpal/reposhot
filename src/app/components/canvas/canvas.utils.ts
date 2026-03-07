@@ -1,5 +1,6 @@
-import { devIconsCdn, languageIconsMap } from '@/data';
+import { devIconsCdn } from '@/data';
 import { mapLanguageToSvg } from '@/utils/mapping';
+import { canvasUi } from '@/utils/canvas';
 
 const iconPaths = {
   star: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXItaWNvbiBsdWNpZGUtc3RhciI+PHBhdGggZD0iTTExLjUyNSAyLjI5NWEuNTMuNTMgMCAwIDEgLjk1IDBsMi4zMSA0LjY3OWEyLjEyMyAyLjEyMyAwIDAgMCAxLjU5NSAxLjE2bDUuMTY2Ljc1NmEuNTMuNTMgMCAwIDEgLjI5NC45MDRsLTMuNzM2IDMuNjM4YTIuMTIzIDIuMTIzIDAgMCAwLS42MTEgMS44NzhsLjg4MiA1LjE0YS41My41MyAwIDAgMS0uNzcxLjU2bC00LjYxOC0yLjQyOGEyLjEyMiAyLjEyMiAwIDAgMC0xLjk3MyAwTDYuMzk2IDIxLjAxYS41My41MyAwIDAgMS0uNzctLjU2bC44ODEtNS4xMzlhMi4xMjIgMi4xMjIgMCAwIDAtLjYxMS0xLjg3OUwyLjE2IDkuNzk1YS41My41MyAwIDAgMSAuMjk0LS45MDZsNS4xNjUtLjc1NWEyLjEyMiAyLjEyMiAwIDAgMCAxLjU5Ny0xLjE2eiIvPjwvc3ZnPg==',
@@ -12,14 +13,6 @@ const statIcons = {
   star: createIconImage(iconPaths.star),
   fork: createIconImage(iconPaths.fork),
   issues: createIconImage(iconPaths.issues),
-};
-
-export const canvasUi = {
-  backgroundColor: '#0D1117',
-  borderColor: '#e1e4e8',
-  primaryTextColor: '#ffffff',
-  secondaryTextColor: '#f9fafb',
-  padding: 60,
 };
 
 export const canvas = { width: 1200, height: 630 };
@@ -40,18 +33,24 @@ export function drawBackground(
   canvasWidth: number,
   canvasHeight: number,
 ) {
+  ctx.save();
+
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  ctx.restore();
 }
 
 export function drawAvatar(
   ctx: CanvasRenderingContext2D,
   imageUrl: string,
+  borderColor: string,
   quadrantX: number,
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
 ) {
+
   // 1. Calculate center position within quadrant
   const centerX = quadrantX + canvasUi.padding + quadrantW / 2;
   const centerY = quadrantY + quadrantH / 1.5;
@@ -73,13 +72,13 @@ export function drawAvatar(
     // 4. Draw the image
     ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
 
-    ctx.restore();
-
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = canvasUi.borderColor;
+    ctx.strokeStyle = borderColor;
     ctx.lineWidth = 3;
     ctx.stroke();
+
+    ctx.restore();
   };
 
   img.src = imageUrl;
@@ -90,6 +89,8 @@ export function drawRepoInfo(
   username: string,
   repoName: string,
   description: string = '',
+  primaryTextColor: string,
+  secondaryTextColor: string,
   quadrantX: number,
   quadrantY: number,
   quadrantW: number,
@@ -107,6 +108,8 @@ export function drawRepoInfo(
   const descFontSize = 24;
   const descLineHeight = 1.4;
   const gapBetweenRepoAndDesc = 40;
+
+  ctx.save();
 
   // Wrap description
   ctx.font = descFont;
@@ -129,26 +132,29 @@ export function drawRepoInfo(
 
   // Line 1: Username + separator
   ctx.font = usernameFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = secondaryTextColor;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText(username + ' / ', startX, currentY);
   currentY += usernameFontSize;
 
+
   // Line 2: Repo name
   ctx.font = repoFont;
-  ctx.fillStyle = canvasUi.primaryTextColor;
+  ctx.fillStyle = primaryTextColor;
   const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
 
   // Description block (truncated)
   ctx.font = descFont;
-  ctx.fillStyle = canvasUi.secondaryTextColor;
+  ctx.fillStyle = secondaryTextColor;
   visibleDescLines.forEach((line) => {
     ctx.fillText(line, startX, currentY);
     currentY += lineHeightPx;
   });
+
+  ctx.restore();
 }
 
 function wrapRepoName(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
@@ -239,6 +245,8 @@ function drawStatItem(
   const iconNumberGap = 8;
   const numberLabelGap = 10;
 
+  ctx.save();
+
   // Measure text widths for centering
   ctx.font = numberFont;
   const numberText = formatNumber(stat.value);
@@ -273,6 +281,8 @@ function drawStatItem(
   ctx.fillStyle = canvasUi.secondaryTextColor;
   ctx.textAlign = 'left';
   ctx.fillText(stat.label, labelStartX, startY + topRowHeight + numberLabelGap);
+
+  ctx.restore();
 }
 
 export function drawLogo(
@@ -286,6 +296,8 @@ export function drawLogo(
 
   img.onload = () => {
     // Calculate logo dimensions
+    ctx.save();
+    ctx.globalAlpha = 0.3;
     const logoWidth = 64;
     const logoHeight = (img.height / img.width) * logoWidth;
 
@@ -293,9 +305,8 @@ export function drawLogo(
     const x = quadrantX + quadrantW - logoWidth - canvasUi.padding;
     const y = quadrantY + quadrantH - logoHeight - canvasUi.padding;
 
-    ctx.globalAlpha = 0.3;
     ctx.drawImage(img, x, y, logoWidth, logoHeight);
-    ctx.globalAlpha = 1.0;
+    ctx.restore();
   };
 
   img.src = 'reposhot-logo.svg';

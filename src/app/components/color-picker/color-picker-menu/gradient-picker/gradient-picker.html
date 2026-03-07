@@ -1,0 +1,19 @@
+<div
+  class="gradient-square w-52 h-52 relative cursor-crosshair"
+  [style.background-color]="'hsl(' + hue() + ', 100%, 50%)'"
+  (mousedown)="onMouseDown($event)"
+  (mouseup)="onMouseUp($event)"
+  (mousemove)="onMouseMove($event)"
+>
+  <!-- White to transparent horizontally (saturation) -->
+  <div class="absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
+  <!-- Transparent to black vertically (lightness) -->
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
+
+  <!-- Cursor -->
+  <div
+    class="absolute w-4 h-4 border-2 border-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+    [style.left.%]="cursorX()"
+    [style.top.%]="cursorY()"
+  ></div>
+</div>

@@ -15,17 +15,6 @@ html {
     typography: Roboto,
     density: 0,
   ));
-
-  // if dark mode is activated
-  // use the theme inside
-  @media (prefers-color-scheme: dark) {
-    @include mat.theme(
-      (
-        color: mat.$azure-palette,
-      ),
-      $overrides: (background: darkblue)
-    );
-  }
 }
 
 body {

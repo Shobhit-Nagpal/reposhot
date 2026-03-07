@@ -1,0 +1,13 @@
+<div
+  [matMenuTriggerFor]="colorMenu"
+  class="cursor-pointer w-8 h-8 rounded border-2 border-gray-300"
+  [style.background-color]="value()"
+></div>
+
+<mat-menu #colorMenu="matMenu">
+  <reposhot-color-picker-menu
+    [value]="value()"
+    (valueChange)="onValueChange($event)"
+    (click)="$event.stopPropagation()"
+  ></reposhot-color-picker-menu>
+</mat-menu>

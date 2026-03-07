@@ -1,9 +1,17 @@
-import { Repository } from '@/types';
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { CanvasState, Repository } from '@/types';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   canvas,
-  canvasUi,
   drawAvatar,
   drawBackground,
   drawLogo,
@@ -16,35 +24,78 @@ import {
   Q4,
   quadrant,
 } from './canvas.utils';
+import { StoreService } from '@/app/services/store/store.service';
+import { SidesheetControls } from '../sidesheet-controls/sidesheet-controls';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'reposhot-canvas',
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, SidesheetControls, MatSidenavModule, MatIconModule],
   templateUrl: './canvas.html',
 })
 export class Canvas implements AfterViewInit {
   canvasData = input.required<Repository>();
-  canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
 
+  #breakpointObserver = inject(BreakpointObserver);
   #ctx: CanvasRenderingContext2D;
-  #imageName = 'reposhot-image.png';
+
+  #storeService = inject(StoreService);
+
+  isMobile = toSignal(
+    this.#breakpointObserver
+      .observe([Breakpoints.Handset])
+      .pipe(map((r: BreakpointState) => r.matches)),
+    { initialValue: false },
+  );
+
+  constructor() {
+    effect(() => {
+      const state = this.#storeService.state();
+      if (this.#ctx) {
+        this.#draw(state);
+      }
+    });
+
+    effect(() => {
+      this.isMobile(); // track it
+      untracked(() => {
+        const el = this.canvas()?.nativeElement;
+        if (el) this.#initSetup();
+      });
+    });
+  }
 
   ngAfterViewInit(): void {
     this.#initSetup();
   }
 
-  #draw() {
-    this.#drawSnapshot();
+  #draw(state: CanvasState) {
+    this.#drawSnapshot(state);
   }
 
-  #drawSnapshot() {
-    drawBackground(this.#ctx, canvasUi.backgroundColor, canvas.width, canvas.height);
-    drawAvatar(this.#ctx, this.canvasData().avatarUrl, Q2.x, Q2.y, quadrant.width, quadrant.height);
+  #drawSnapshot(state: CanvasState) {
+    drawBackground(this.#ctx, state.backgroundColor, canvas.width, canvas.height);
+    drawAvatar(
+      this.#ctx,
+      this.canvasData().avatarUrl,
+      state.borderColor,
+      Q2.x,
+      Q2.y,
+      quadrant.width,
+      quadrant.height,
+    );
     drawRepoInfo(
       this.#ctx,
       this.canvasData().owner,
       this.canvasData().name,
       this.canvasData().description,
+      state.primaryTextColor,
+      state.secondaryTextColor,
       Q1.x,
       Q1.y,
       quadrant.width,
@@ -62,12 +113,22 @@ export class Canvas implements AfterViewInit {
       quadrant.width,
       quadrant.height,
     );
-    drawTopLanguages(this.#ctx, this.canvasData().topLanguages, Q4.x, Q4.y, quadrant.width, quadrant.height);
+    drawTopLanguages(
+      this.#ctx,
+      this.canvasData().topLanguages,
+      Q4.x,
+      Q4.y,
+      quadrant.width,
+      quadrant.height,
+    );
     drawLogo(this.#ctx, Q4.x, Q4.y, quadrant.width, quadrant.height);
   }
 
   #setupCanvas() {
-    const canvasEl = this.canvas().nativeElement;
+    const canvasEl = this.canvas()?.nativeElement;
+    if (!canvasEl) {
+      return;
+    };
     const dpr = window.devicePixelRatio || 1;
 
     // Set actual canvas buffer size (high-res)
@@ -87,15 +148,6 @@ export class Canvas implements AfterViewInit {
 
   #initSetup() {
     this.#setupCanvas();
-    this.#draw();
-  }
-
-  downloadImage() {
-    const canvasURL = this.canvas().nativeElement.toDataURL();
-    const el = document.createElement('a');
-    el.href = canvasURL;
-    el.download = this.#imageName;
-    el.click();
-    el.remove();
+    this.#draw(this.#storeService.state());
   }
 }

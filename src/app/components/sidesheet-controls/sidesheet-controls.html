@@ -1,0 +1,46 @@
+<div class="w-full h-full flex flex-col items-between justify-between py-4 px-2">
+  <div class="flex flex-col space-y-8">
+    <div>
+      <h1 class="text-3xl font-bold">Customize</h1>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <label class="block">
+        Background color
+        <reposhot-color-picker
+          [value]="state().backgroundColor"
+          (valueChange)="onBackgroundColorChange($event)"
+        ></reposhot-color-picker>
+      </label>
+      <label class="block">
+        Border color
+        <reposhot-color-picker
+          [value]="state().borderColor"
+          (valueChange)="onBorderColorChange($event)"
+        ></reposhot-color-picker>
+      </label>
+      <label class="block">
+        Primary text color
+        <reposhot-color-picker
+          [value]="state().primaryTextColor"
+          (valueChange)="onPrimaryTextColorChange($event)"
+        ></reposhot-color-picker>
+      </label>
+      <label class="block">
+        Secondary text color
+        <reposhot-color-picker
+          [value]="state().secondaryTextColor"
+          (valueChange)="onSecondaryTextColorChange($event)"
+        ></reposhot-color-picker>
+      </label>
+    </div>
+  </div>
+  <div class="my-4">
+    <button
+      matButton="outlined"
+      class="w-full h-12 text-base font-medium"
+      (click)="downloadImage()"
+    >
+      Download
+    </button>
+  </div>
+</div>
