@@ -4,8 +4,4 @@ export const canvasUi = {
   primaryTextColor: '#ffffff',
   secondaryTextColor: '#f9fafb',
   padding: 60,
-  backgroundColorAlpha: 1,
-  borderColorAlpha: 1,
-  primaryTextColorAlpha: 1,
-  secondaryTextColorAlpha: 1,
 };

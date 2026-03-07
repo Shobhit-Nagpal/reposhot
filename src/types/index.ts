@@ -25,10 +25,6 @@ export type CanvasState = {
   borderColor: string;
   primaryTextColor: string;
   secondaryTextColor: string;
-  backgroundColorAlpha?: number;
-  borderColorAlpha?: number;
-  primaryTextColorAlpha?: number;
-  secondaryTextColorAlpha?: number;
 }
 
 /*

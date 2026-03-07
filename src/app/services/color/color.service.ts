@@ -54,15 +54,6 @@ export class ColorService {
     this.#state.set(hex);
   }
 
-  setAlpha(a: number) {
-    const hex = this.#engine.hslToHex({
-      ...this.hsl(),
-      a
-    });
-
-    this.#state.set(hex);
-  }
-
   rgb(): RGB {
     return this.#engine.hexToRgb(this.#state());
   }
@@ -73,10 +64,6 @@ export class ColorService {
 
   hsl(): HSL {
     return this.#hexToHsl(this.#state());
-  }
-
-  alpha(): number {
-    return this.#hexToHsl(this.#state()).a ?? 1;
   }
 
   #hexToHsl(hex: string): HSL {

@@ -11,15 +11,10 @@ import { ColorService } from '@/app/services/color/color.service';
 })
 export class ColorPicker {
   value = input.required<string>();
-  valueChange = output<string>();
 
-  alphaChange = output<number>();
+  valueChange = output<string>();
 
   onValueChange(v: string) {
     this.valueChange.emit(v);
-  }
-
-  onAlphaChange(v: number) {
-    this.alphaChange.emit(v);
   }
 }

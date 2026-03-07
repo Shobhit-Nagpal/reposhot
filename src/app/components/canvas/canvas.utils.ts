@@ -32,14 +32,13 @@ export function drawBackground(
   bgColor: string,
   canvasWidth: number,
   canvasHeight: number,
-  alpha = 1,
 ) {
-  ctx.globalAlpha = alpha;
+  ctx.save();
 
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-  ctx.globalAlpha = 1;
+  ctx.restore();
 }
 
 export function drawAvatar(
@@ -50,9 +49,7 @@ export function drawAvatar(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
-  alpha = 1,
 ) {
-  ctx.globalAlpha = alpha;
 
   // 1. Calculate center position within quadrant
   const centerX = quadrantX + canvasUi.padding + quadrantW / 2;
@@ -75,18 +72,16 @@ export function drawAvatar(
     // 4. Draw the image
     ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
 
-    ctx.restore();
-
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.strokeStyle = borderColor;
     ctx.lineWidth = 3;
     ctx.stroke();
+
+    ctx.restore();
   };
 
   img.src = imageUrl;
-
-  ctx.globalAlpha = 1;
 }
 
 export function drawRepoInfo(
@@ -100,8 +95,6 @@ export function drawRepoInfo(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
-  primaryTextAlpha = 1,
-  secondaryTextAlpha = 1,
 ) {
   const padding = canvasUi.padding;
   const maxWidth = quadrantW - padding * 2;
@@ -115,6 +108,8 @@ export function drawRepoInfo(
   const descFontSize = 24;
   const descLineHeight = 1.4;
   const gapBetweenRepoAndDesc = 40;
+
+  ctx.save();
 
   // Wrap description
   ctx.font = descFont;
@@ -135,8 +130,6 @@ export function drawRepoInfo(
   let currentY = quadrantY + (quadrantH - totalHeight);
   const startX = quadrantX + padding;
 
-  ctx.globalAlpha = secondaryTextAlpha;
-
   // Line 1: Username + separator
   ctx.font = usernameFont;
   ctx.fillStyle = secondaryTextColor;
@@ -145,7 +138,6 @@ export function drawRepoInfo(
   ctx.fillText(username + ' / ', startX, currentY);
   currentY += usernameFontSize;
 
-  ctx.globalAlpha = primaryTextAlpha;
 
   // Line 2: Repo name
   ctx.font = repoFont;
@@ -153,8 +145,6 @@ export function drawRepoInfo(
   const wrappedRepoName = wrapRepoName(ctx, repoName, quadrantW + padding * 3);
   ctx.fillText(wrappedRepoName, startX, currentY);
   currentY += repoFontSize + gapBetweenRepoAndDesc;
-
-  ctx.globalAlpha = secondaryTextAlpha;
 
   // Description block (truncated)
   ctx.font = descFont;
@@ -164,7 +154,7 @@ export function drawRepoInfo(
     currentY += lineHeightPx;
   });
 
-  ctx.globalAlpha = 1;
+  ctx.restore();
 }
 
 function wrapRepoName(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
@@ -221,7 +211,6 @@ export function drawStats(
   quadrantY: number,
   quadrantW: number,
   quadrantH: number,
-  secondarTextAlpha = 1,
 ) {
   const { stars, forks, issues } = stats;
 
@@ -240,7 +229,7 @@ export function drawStats(
     const itemX = quadrantX + index * itemWidth;
     const itemCenterX = itemX + itemWidth / 2;
 
-    drawStatItem(ctx, stat, itemCenterX, centerY, secondarTextAlpha);
+    drawStatItem(ctx, stat, itemCenterX, centerY);
   });
 }
 
@@ -249,13 +238,14 @@ function drawStatItem(
   stat: { icon: HTMLImageElement; value: number; label: string },
   centerX: number,
   centerY: number,
-  secondaryTextAlpha = 1,
 ) {
   const iconSize = 24;
   const numberFont = 'bold 24px sans-serif';
   const labelFont = '18px sans-serif';
   const iconNumberGap = 8;
   const numberLabelGap = 10;
+
+  ctx.save();
 
   // Measure text widths for centering
   ctx.font = numberFont;
@@ -276,8 +266,6 @@ function drawStatItem(
   const totalHeight = topRowHeight + numberLabelGap + 16; // 16 is label font size
   const startY = centerY - totalHeight / 2;
 
-  ctx.globalAlpha = secondaryTextAlpha;
-
   // Draw icon
   ctx.drawImage(stat.icon, topRowStartX, startY, iconSize, iconSize);
 
@@ -294,7 +282,7 @@ function drawStatItem(
   ctx.textAlign = 'left';
   ctx.fillText(stat.label, labelStartX, startY + topRowHeight + numberLabelGap);
 
-  ctx.globalAlpha = 1;
+  ctx.restore();
 }
 
 export function drawLogo(
@@ -308,6 +296,8 @@ export function drawLogo(
 
   img.onload = () => {
     // Calculate logo dimensions
+    ctx.save();
+    ctx.globalAlpha = 0.3;
     const logoWidth = 64;
     const logoHeight = (img.height / img.width) * logoWidth;
 
@@ -315,9 +305,8 @@ export function drawLogo(
     const x = quadrantX + quadrantW - logoWidth - canvasUi.padding;
     const y = quadrantY + quadrantH - logoHeight - canvasUi.padding;
 
-    ctx.globalAlpha = 0.3;
     ctx.drawImage(img, x, y, logoWidth, logoHeight);
-    ctx.globalAlpha = 1.0;
+    ctx.restore();
   };
 
   img.src = 'reposhot-logo.svg';

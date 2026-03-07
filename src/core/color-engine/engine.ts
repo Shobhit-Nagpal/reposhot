@@ -93,7 +93,7 @@ export class ColorEngine {
    * Source: https://www.rapidtables.com/convert/color/rgb-to-hsl.html
    * (R, G, B) are integers, not decimals
    */
-  rgbToHsl(color: RGB, alpha?: number): HSL {
+  rgbToHsl(color: RGB): HSL {
     const _r = color.r / 255;
     const _g = color.g / 255;
     const _b = color.b / 255;
@@ -143,7 +143,6 @@ export class ColorEngine {
       h,
       s,
       l,
-      a: alpha ?? 1,
       __type: ModelType.HSL,
     };
   }

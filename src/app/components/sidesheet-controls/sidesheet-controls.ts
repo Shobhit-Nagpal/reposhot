@@ -32,12 +32,6 @@ export class SidesheetControls {
     });
   }
 
-  protected onBackgroundColorAlphaChange(alpha: number) {
-    this.#storeService.updateState({
-      backgroundColorAlpha: alpha,
-    });
-  }
-
   protected onBorderColorChange(color: string) {
     this.#storeService.updateState({
       borderColor: color,
