@@ -54,6 +54,12 @@ export class ColorService {
     this.#state.set(hex);
   }
 
+  setFromHSB(h: number, s: number, b: number) {
+    const rgb = this.#engine.hsbToRgb(h, s, b)
+    const hex = this.#engine.rgbToHex(rgb)
+    this.#state.set(hex);
+  }
+
   rgb(): RGB {
     return this.#engine.hexToRgb(this.#state());
   }

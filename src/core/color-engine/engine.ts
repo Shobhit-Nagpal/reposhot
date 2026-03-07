@@ -5,7 +5,6 @@ const initState: HSL = {
   h: 0,
   s: 0,
   l: 0.5,
-  a: 1,
   __type: ModelType.HSL,
 };
 
@@ -85,6 +84,17 @@ export class ColorEngine {
       g,
       b,
       __type: ModelType.RGB,
+    };
+  }
+
+  hsbToRgb(h: number, s: number, b: number): RGB {
+    const k = (n: number) => (n + h / 60) % 6;
+    const f = (n: number) => b * (1 - s * Math.max(0, Math.min(k(n), 4 - k(n), 1)));
+    return {
+      r: Math.round(f(5) * 255),
+      g: Math.round(f(3) * 255),
+      b: Math.round(f(1) * 255),
+      __type: ModelType.RGB
     };
   }
 

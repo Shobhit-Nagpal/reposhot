@@ -41,7 +41,6 @@ export type HSL = {
   h: number;
   s: number;
   l: number;
-  a?: number;
   __type: ModelType.HSL;
 }
 

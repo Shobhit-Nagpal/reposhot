@@ -5,11 +5,10 @@
   (mouseup)="onMouseUp($event)"
   (mousemove)="onMouseMove($event)"
 >
-  <!-- White to transparent (controls saturation) -->
+  <!-- White to transparent horizontally (saturation) -->
   <div class="absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
-
-  <!-- Transparent to black (controls lightness) -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+  <!-- Transparent to black vertically (lightness) -->
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
 
   <!-- Cursor -->
   <div

@@ -33,8 +33,7 @@ export class GradientPicker implements OnInit {
       this.cursorY.set(clampedY);
     }
 
-    this.#colorService.setSaturation(clampedX / 100);
-    this.#colorService.setLightness(1 - clampedY / 100);
+    this.#colorService.setFromHSB(this.hue(), clampedX / 100, 1 - clampedY / 100);
 
     this.#isMouseDown = false;
   }
