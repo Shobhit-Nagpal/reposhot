@@ -38,7 +38,6 @@ export class Canvas implements AfterViewInit {
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
 
   #ctx: CanvasRenderingContext2D;
-  #imageName = 'reposhot-image.png';
 
   #storeService = inject(StoreService);
 
@@ -131,14 +130,5 @@ export class Canvas implements AfterViewInit {
   #initSetup() {
     this.#setupCanvas();
     this.#draw(this.#storeService.state());
-  }
-
-  downloadImage() {
-    const canvasURL = this.canvas().nativeElement.toDataURL();
-    const el = document.createElement('a');
-    el.href = canvasURL;
-    el.download = this.#imageName;
-    el.click();
-    el.remove();
   }
 }

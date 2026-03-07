@@ -11,7 +11,7 @@ import { ColorPicker } from '../color-picker/color-picker';
 })
 export class SidesheetControls {
   canvasEl = input.required<ElementRef<HTMLCanvasElement>>();
-  #imageName = 'reposhot-image.png';
+  imageName = input<string>('reposhot-image.png');
 
   #storeService = inject(StoreService);
 
@@ -21,7 +21,7 @@ export class SidesheetControls {
     const canvasURL = this.canvasEl().nativeElement.toDataURL();
     const el = document.createElement('a');
     el.href = canvasURL;
-    el.download = this.#imageName;
+    el.download = this.#ensurePngSuffix(this.imageName());
     el.click();
     el.remove();
   }
@@ -54,5 +54,13 @@ export class SidesheetControls {
     this.#storeService.updateState({
       secondaryTextColor: color,
     });
+  }
+
+  #ensurePngSuffix(name: string): string {
+    if (name.endsWith('.png')) {
+      return name;
+    }
+
+    return `${name}.png`
   }
 }

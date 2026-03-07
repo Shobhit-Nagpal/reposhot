@@ -1,6 +1,6 @@
 <mat-drawer-container class="w-auto h-full px-4 !bg-white" autosize>
   <mat-drawer mode="side" opened>
-    <reposhot-sidesheet-controls [canvasEl]="canvas()"></reposhot-sidesheet-controls>
+    <reposhot-sidesheet-controls [canvasEl]="canvas()" [imageName]="canvasData().name"></reposhot-sidesheet-controls>
   </mat-drawer>
   <mat-drawer-content>
     <canvas #reposhotCanvas class="w-full h-auto"></canvas>
