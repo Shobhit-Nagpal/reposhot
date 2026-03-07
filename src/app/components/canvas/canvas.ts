@@ -6,6 +6,7 @@ import {
   ElementRef,
   inject,
   input,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,6 +28,9 @@ import { StoreService } from '@/app/services/store/store.service';
 import { SidesheetControls } from '../sidesheet-controls/sidesheet-controls';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'reposhot-canvas',
@@ -35,11 +39,19 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Canvas implements AfterViewInit {
   canvasData = input.required<Repository>();
-  canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('reposhotCanvas');
 
+  #breakpointObserver = inject(BreakpointObserver);
   #ctx: CanvasRenderingContext2D;
 
   #storeService = inject(StoreService);
+
+  isMobile = toSignal(
+    this.#breakpointObserver
+      .observe([Breakpoints.Handset])
+      .pipe(map((r: BreakpointState) => r.matches)),
+    { initialValue: false },
+  );
 
   constructor() {
     effect(() => {
@@ -47,6 +59,14 @@ export class Canvas implements AfterViewInit {
       if (this.#ctx) {
         this.#draw(state);
       }
+    });
+
+    effect(() => {
+      this.isMobile(); // track it
+      untracked(() => {
+        const el = this.canvas()?.nativeElement;
+        if (el) this.#initSetup();
+      });
     });
   }
 
@@ -105,7 +125,10 @@ export class Canvas implements AfterViewInit {
   }
 
   #setupCanvas() {
-    const canvasEl = this.canvas().nativeElement;
+    const canvasEl = this.canvas()?.nativeElement;
+    if (!canvasEl) {
+      return;
+    };
     const dpr = window.devicePixelRatio || 1;
 
     // Set actual canvas buffer size (high-res)
