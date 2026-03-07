@@ -48,7 +48,7 @@ export class Canvas implements AfterViewInit {
 
   isMobile = toSignal(
     this.#breakpointObserver
-      .observe([Breakpoints.Handset])
+      .observe([Breakpoints.Large])
       .pipe(map((r: BreakpointState) => r.matches)),
     { initialValue: false },
   );
