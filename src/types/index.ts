@@ -54,3 +54,12 @@ export enum ModelType {
 export type ColorInputMode = 'RGB' | 'HSL' | 'HEX';
 
 export type Hex = string;
+
+export type Theme = {
+  id: number;
+  name: string;
+  backgroundColor: Hex;
+  borderColor: Hex;
+  primaryTextColor: Hex;
+  secondaryTextColor: Hex;
+}

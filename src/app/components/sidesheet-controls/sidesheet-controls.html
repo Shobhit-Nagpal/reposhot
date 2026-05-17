@@ -3,36 +3,59 @@
     <div>
       <h1 class="text-3xl font-bold">Customize</h1>
     </div>
-    <div class="flex flex-col space-y-4">
-      <label class="block">
-        Background color
-        <reposhot-color-picker
-          [value]="state().backgroundColor"
-          (valueChange)="onBackgroundColorChange($event)"
-        ></reposhot-color-picker>
-      </label>
-      <label class="block">
-        Border color
-        <reposhot-color-picker
-          [value]="state().borderColor"
-          (valueChange)="onBorderColorChange($event)"
-        ></reposhot-color-picker>
-      </label>
-      <label class="block">
-        Primary text color
-        <reposhot-color-picker
-          [value]="state().primaryTextColor"
-          (valueChange)="onPrimaryTextColorChange($event)"
-        ></reposhot-color-picker>
-      </label>
-      <label class="block">
-        Secondary text color
-        <reposhot-color-picker
-          [value]="state().secondaryTextColor"
-          (valueChange)="onSecondaryTextColorChange($event)"
-        ></reposhot-color-picker>
-      </label>
-    </div>
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="Themes">
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          @for (theme of themes(); track theme.id) {
+          <div class="flex flex-col gap-2 p-3 rounded-lg border border-border hover:border-primary cursor-pointer transition-colors"
+               (click)="onSelectTheme(theme)"
+               >
+            <div class="flex gap-2">
+              <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.backgroundColor" title="Background"></span>
+              <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.borderColor" title="Border"></span>
+              <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.primaryTextColor" title="Primary text"></span>
+              <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.secondaryTextColor" title="Secondary text"></span>
+            </div>
+            @if (theme.name) {
+            <span class="text-xs font-medium truncate">{{ theme.name }}</span>
+            }
+          </div>
+          }
+        </div>
+      </mat-tab>
+      <mat-tab label="Customize">
+        <div class="flex flex-col space-y-8 mt-4">
+          <label class="block">
+            Background color
+            <reposhot-color-picker
+              [value]="state().backgroundColor"
+              (valueChange)="onBackgroundColorChange($event)"
+              ></reposhot-color-picker>
+          </label>
+          <label class="block">
+            Border color
+            <reposhot-color-picker
+              [value]="state().borderColor"
+              (valueChange)="onBorderColorChange($event)"
+              ></reposhot-color-picker>
+          </label>
+          <label class="block">
+            Primary text color
+            <reposhot-color-picker
+              [value]="state().primaryTextColor"
+              (valueChange)="onPrimaryTextColorChange($event)"
+              ></reposhot-color-picker>
+          </label>
+          <label class="block">
+            Secondary text color
+            <reposhot-color-picker
+              [value]="state().secondaryTextColor"
+              (valueChange)="onSecondaryTextColorChange($event)"
+              ></reposhot-color-picker>
+          </label>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
   <div class="my-4">
     <button
