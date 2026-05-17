@@ -1,12 +1,15 @@
 import { StoreService } from '@/app/services/store/store.service';
-import { Component, computed, ElementRef, inject, input } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ColorPicker } from '../color-picker/color-picker';
+import { MatTabsModule } from '@angular/material/tabs';
+import { themes } from '@/data';
+import { Theme } from '@/types';
 
 @Component({
   selector: 'reposhot-sidesheet-controls',
-  imports: [MatSidenavModule, MatButtonModule, ColorPicker],
+  imports: [MatSidenavModule, MatButtonModule, MatTabsModule, ColorPicker],
   templateUrl: './sidesheet-controls.html',
 })
 export class SidesheetControls {
@@ -16,6 +19,7 @@ export class SidesheetControls {
   #storeService = inject(StoreService);
 
   state = computed(() => this.#storeService.state());
+  themes = signal(themes).asReadonly();
 
   protected downloadImage() {
     const canvasURL = this.canvasEl()?.nativeElement?.toDataURL();
@@ -27,6 +31,15 @@ export class SidesheetControls {
     el.download = this.#ensurePngSuffix(this.imageName());
     el.click();
     el.remove();
+  }
+
+  protected onSelectTheme(theme: Theme) {
+    this.#storeService.updateState({
+      backgroundColor: theme.backgroundColor,
+      primaryTextColor: theme.primaryTextColor,
+      borderColor: theme.borderColor,
+      secondaryTextColor: theme.secondaryTextColor,
+    });
   }
 
   protected onBackgroundColorChange(color: string) {
