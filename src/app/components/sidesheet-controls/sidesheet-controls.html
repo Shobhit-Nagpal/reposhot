@@ -1,15 +1,12 @@
 <div class="w-full h-full flex flex-col items-between justify-between py-4 px-2">
-  <div class="flex flex-col space-y-8">
-    <div>
-      <h1 class="text-3xl font-bold">Customize</h1>
-    </div>
+  <div class="flex flex-col space-y-8 min-h-0 flex-1 overflow-y-auto">
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Themes">
         <div class="grid grid-cols-2 gap-3 mt-4">
           @for (theme of themes(); track theme.id) {
-          <div class="flex flex-col gap-2 p-3 rounded-lg border border-border hover:border-primary cursor-pointer transition-colors"
-               (click)="onSelectTheme(theme)"
-               >
+            <div class="flex flex-col gap-2 p-3 rounded-lg border border-border hover:border-primary cursor-pointer transition-colors"
+              (click)="onSelectTheme(theme)"
+              >
             <div class="flex gap-2">
               <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.backgroundColor" title="Background"></span>
               <span class="w-7 h-7 rounded-full ring-1 ring-black/10" [style.backgroundColor]="theme.borderColor" title="Border"></span>
