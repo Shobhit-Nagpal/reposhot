@@ -1,6 +1,6 @@
 <!-- Desktop -->
 @if (!isMobile()) {
-  <mat-drawer-container class="w-auto h-full px-4 !bg-primary dark:!bg-primary" autosize>
+  <mat-drawer-container class="w-auto h-full px-4 bg-primary! dark:bg-primary!" autosize>
     <mat-drawer mode="side" opened>
       <reposhot-sidesheet-controls [canvasEl]="canvas() ?? null" [imageName]="canvasData().name" />
     </mat-drawer>
