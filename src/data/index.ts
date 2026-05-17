@@ -1,4 +1,4 @@
-import { Repository } from '@/types';
+import { Repository, Theme } from '@/types';
 
 export const MOCK_REPOSITORY_DATA: Repository = {
   link: 'https://github.com/torvalds/linux',
@@ -37,3 +37,31 @@ export const languageIconsMap: Record<string, string> = {
 };
 
 export const devIconsCdn = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
+
+export const themes: Theme[] = [
+  { id: 1,  name: 'Midnight',       backgroundColor: '#0d1117', borderColor: '#30363d', primaryTextColor: '#f0f6fc', secondaryTextColor: '#8b949e' },
+  { id: 2,  name: 'Nord',           backgroundColor: '#2e3440', borderColor: '#88c0d0', primaryTextColor: '#eceff4', secondaryTextColor: '#d8dee9' },
+  { id: 3,  name: 'Dracula',        backgroundColor: '#282a36', borderColor: '#ff79c6', primaryTextColor: '#f8f8f2', secondaryTextColor: '#6272a4' },
+  { id: 4,  name: 'Monokai',        backgroundColor: '#272822', borderColor: '#a6e22e', primaryTextColor: '#f8f8f2', secondaryTextColor: '#75715e' },
+  { id: 5,  name: 'Catppuccin',     backgroundColor: '#1e1e2e', borderColor: '#cba6f7', primaryTextColor: '#cdd6f4', secondaryTextColor: '#6c7086' },
+  { id: 6,  name: 'Tokyo Night',    backgroundColor: '#1a1b26', borderColor: '#7aa2f7', primaryTextColor: '#c0caf5', secondaryTextColor: '#565f89' },
+  { id: 7,  name: 'One Dark',       backgroundColor: '#282c34', borderColor: '#61afef', primaryTextColor: '#abb2bf', secondaryTextColor: '#5c6370' },
+  { id: 8,  name: 'Gruvbox',        backgroundColor: '#282828', borderColor: '#fabd2f', primaryTextColor: '#ebdbb2', secondaryTextColor: '#928374' },
+  { id: 9,  name: 'Synthwave',      backgroundColor: '#2b213a', borderColor: '#f72585', primaryTextColor: '#ffffff', secondaryTextColor: '#b14ae1' },
+  { id: 10, name: 'Cyberpunk',      backgroundColor: '#0d0221', borderColor: '#00fff9', primaryTextColor: '#ffffff', secondaryTextColor: '#7b2d8b' },
+  { id: 11, name: 'Solarized',      backgroundColor: '#002b36', borderColor: '#268bd2', primaryTextColor: '#839496', secondaryTextColor: '#657b83' },
+  { id: 12, name: 'Rosé Pine',      backgroundColor: '#191724', borderColor: '#ebbcba', primaryTextColor: '#e0def4', secondaryTextColor: '#6e6a86' },
+  { id: 13, name: 'Everforest',     backgroundColor: '#2d353b', borderColor: '#a7c080', primaryTextColor: '#d3c6aa', secondaryTextColor: '#859289' },
+  { id: 14, name: 'Kanagawa',       backgroundColor: '#1f1f28', borderColor: '#7e9cd8', primaryTextColor: '#dcd7ba', secondaryTextColor: '#727169' },
+  { id: 15, name: 'Ayu',            backgroundColor: '#0b0e14', borderColor: '#e6b450', primaryTextColor: '#bfbdb6', secondaryTextColor: '#5c6773' },
+  { id: 16, name: 'Ocean',          backgroundColor: '#0f172a', borderColor: '#38bdf8', primaryTextColor: '#f1f5f9', secondaryTextColor: '#64748b' },
+  { id: 17, name: 'Emerald',        backgroundColor: '#064e3b', borderColor: '#34d399', primaryTextColor: '#ecfdf5', secondaryTextColor: '#6ee7b7' },
+  { id: 18, name: 'Sunset',         backgroundColor: '#431407', borderColor: '#fb923c', primaryTextColor: '#fff7ed', secondaryTextColor: '#fdba74' },
+  { id: 19, name: 'Amethyst',       backgroundColor: '#13111c', borderColor: '#a855f7', primaryTextColor: '#f5f3ff', secondaryTextColor: '#7c3aed' },
+  { id: 20, name: 'Arctic',         backgroundColor: '#f8fafc', borderColor: '#2563eb', primaryTextColor: '#1e293b', secondaryTextColor: '#64748b' },
+  { id: 21, name: 'Paper',          backgroundColor: '#fafaf9', borderColor: '#44403c', primaryTextColor: '#1c1917', secondaryTextColor: '#78716c' },
+  { id: 22, name: 'Coffee',         backgroundColor: '#1c1410', borderColor: '#d4a574', primaryTextColor: '#f5e6d3', secondaryTextColor: '#a07850' },
+  { id: 23, name: 'Terminal',       backgroundColor: '#0a0f0a', borderColor: '#00ff41', primaryTextColor: '#00ff41', secondaryTextColor: '#008f11' },
+  { id: 24, name: 'Cherry',         backgroundColor: '#1a0a0f', borderColor: '#f43f5e', primaryTextColor: '#ffe4e6', secondaryTextColor: '#fda4af' },
+  { id: 25, name: 'Moonlight',      backgroundColor: '#212337', borderColor: '#82aaff', primaryTextColor: '#c8d3f5', secondaryTextColor: '#7a88cf' },
+];
