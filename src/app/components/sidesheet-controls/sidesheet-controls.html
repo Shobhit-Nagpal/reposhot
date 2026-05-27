@@ -22,28 +22,28 @@
       </mat-tab>
       <mat-tab label="Customize">
         <div class="flex flex-col space-y-8 mt-4">
-          <label class="block">
+          <label class="flex items-center justify-between w-80">
             Background color
             <reposhot-color-picker
               [value]="state().backgroundColor"
               (valueChange)="onBackgroundColorChange($event)"
               ></reposhot-color-picker>
           </label>
-          <label class="block">
+          <label class="flex items-center justify-between w-80">
             Border color
             <reposhot-color-picker
               [value]="state().borderColor"
               (valueChange)="onBorderColorChange($event)"
               ></reposhot-color-picker>
           </label>
-          <label class="block">
+          <label class="flex items-center justify-between w-80">
             Primary text color
             <reposhot-color-picker
               [value]="state().primaryTextColor"
               (valueChange)="onPrimaryTextColorChange($event)"
               ></reposhot-color-picker>
           </label>
-          <label class="block">
+          <label class="flex items-center justify-between w-80">
             Secondary text color
             <reposhot-color-picker
               [value]="state().secondaryTextColor"
